@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <title>Skitte {% block head_title %} {% endblock head_title %}</title>
+  <head>
+    {% include 'components/headTags.html' with title=title image=image slug=skit_url type=type %}
+    {% block css %} {% endblock css %}
+  </head>
+  <body>
+  <!-- <body class="background-skin"> -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    {% block need_nav %}
+    {% endblock %}
+    <div id="sktLogo"></div>
+    <!-- Not Compartable -->
+    <div id="cDevice"></div>
+    <div class="Skitte">
+      {% block profile-content %} {% endblock profile-content %}
+      {% block content %} {% endblock content %}
+      <!-- <div id="pwaInstall" class="w-full absolute bottom-0">
+        <img src="{% static 'media/logo/favicon.ico' %}" width="100px" height="50px" alt="skitte logo">
+        <button id="InstallBtn" class="w-10">Install</button>
+      </div> -->
+    </div>
+    <!-- DRY => Don't Repeat Yourself -->
+    {% include 'react/base_embed.html' %}
+    {% include 'react/js.html' %}
+    {% block js %} {% endblock js %}
+  </body>
+</html>

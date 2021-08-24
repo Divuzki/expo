@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block head_title %}| {{username}}{% endblock head_title %}
+{% block profile-content %}
+{% if request.user.is_authenticated %}
+<div class="skitte-profile-badge" data-username="{{ username }}" 
+{% if request.user.username == username %}
+data-canSkit="true"
+{% endif %}
+data-user="{{ user.username }}" data-is_authenticated="yah"></div>
+{% else %}
+<div class="skitte-profile-badge" data-username="{{ username }}" data-canSkit="false" data-user="{{ user.username }}" data-is_authenticated="nah"></div>
+{% endif %}
+{% endblock profile-content %}

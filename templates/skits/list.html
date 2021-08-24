@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<div id="skitte" data-username="{{user.username}}" data-is_authenticated="yah">
+{% else %}
+<div id="skitte" data-is_authenticated="nah"></div>
+{% endif %}
+
+{% endblock content %}
