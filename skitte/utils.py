@@ -1,0 +1,97 @@
+from moviepy.editor import *
+import string
+from django.utils.text import slugify
+import random
+from django.core.files import File
+from pathlib import Path
+from PIL import Image
+from io import BytesIO
+
+
+def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+# ROT13 ENCRYPTION
+rot13trans = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+                       'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
+
+# Function to translate plain text
+
+
+def rot13_encrypt(text):
+   return text.translate(rot13trans)
+
+def unique_slug_generator(instance, new_slug=None):
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        text = instance.timestamp
+        if instance.content:
+            text = instance.content
+        elif instance.caption:
+            text = instance.caption
+        elif instance.image:
+            text = f"{instance.image.size}"
+        slug = slugify(f"@{instance.user.username}-posted-{text}")
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(slug=slug).exists()
+    if qs_exists:
+        new_slug = "{slug}-{randstr}".format(
+            slug=slug, randstr=random_string_generator(size=4))
+
+        return unique_slug_generator(instance, new_slug=new_slug)
+    return rot13_encrypt(slug).upper()
+
+
+image_types = {
+    "jpg": "JPEG",
+    "jpeg": "JPEG",
+    "png": "PNG",
+    "gif": "GIF",
+    "tif": "TIFF",
+    "tiff": "TIFF",
+}
+
+
+def image_resize(image, width, height):
+    # Open the image using Pillow
+    img = Image.open(image)
+    # check if either the width or height is greater than the max
+    if img.width > width or img.height > height:
+        output_size = (width, height)
+        # Create a new resized “thumbnail” version of the image with Pillow
+        img.thumbnail(output_size)
+        # Find the file name of the image
+        img_filename = Path(image.file.name).name
+        # Spilt the filename on “.” to get the file extension only
+        img_suffix = Path(image.file.name).name.split(".")[-1]
+        # Use the file extension to determine the file type from the image_types dictionary
+        img_format = image_types[img_suffix]
+        # Save the resized image into the buffer, noting the correct file type
+        buffer = BytesIO()
+        img.save(buffer, format=img_format)
+        # Wrap the buffer in File object
+        file_object = File(buffer)
+        # Save the new resized file as usual, which will save to S3 using django-storages
+        image.save(img_filename, file_object)
+
+
+def video_converter(video_path, resolution):
+    # Import everything needed to edit video clips
+
+    # loading video dsa gfg intro video and getting only first 5 seconds
+    clip1 = VideoFileClip("dsa_skitte.webm").subclip(0, 60)
+
+    # getting width and height of clip 1
+    w1 = clip1.w
+    h1 = clip1.h
+
+    print("Width x Height of clip 1 : ", end = " ")
+    print(str(w1) + " x ", str(h1))
+
+    print("---------------------------------------")
+
+
+    # showing final clip
+    clip1.ipython_display(width = 720)

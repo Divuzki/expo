@@ -1,0 +1,157 @@
+{% load static %}
+<head>
+  <!-- Path to manifest.json -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Skitte" />
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#4CAF50" />
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Skitte" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <link
+    rel="apple-touch-icon"
+    href="{% static 'media/logo/icon-256x256.png' %}"
+    sizes=""
+  />
+
+  <link
+    rel="apple-touch-icon"
+    href="{% static 'media/logo/icon-384x384.png' %}"
+    sizes=""
+  />
+
+  <link
+    rel="apple-touch-icon"
+    href="{% static 'media/logo/icon-512x512.png' %}"
+    sizes=""
+  />
+
+  <link
+    rel="apple-touch-icon"
+    href="{% static 'media/skitte-logo-curve-rectangle.png' %}"
+    sizes=""
+  />
+
+  <link
+    href="{% static 'media/skitte-logo-curve-rectangle.png' %}"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image"
+  />
+
+  <!-- Tile for Win8 -->
+  <meta name="msapplication-TileColor" content="#0C0C0C" />
+
+  <meta
+    name="msapplication-TileImage"
+    content="/static/media/skitte-logo-curve-rectangle.png"
+  />
+
+  <link
+    rel="icon"
+    sizes=""
+    href="{% static 'media/skitte-logo-curve-rectangle.png' %}"
+  />
+
+  <script type="text/javascript">
+    // Initialize the service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/skt-serviceworker.js", {
+          scope: "/",
+        })
+        .then(
+          function (registration) {
+            // Registration was successful
+
+            console.log(
+              "Skitte PWA: ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
+          },
+          function (err) {
+            // registration failed :(
+
+            console.log("Skitte-pwa: ServiceWorker registration failed: ", err);
+          }
+        );
+    }
+  </script>
+  <meta charset="UTF-8" />
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  />
+  <meta
+    name="viewport"
+    content="minimum-scale=1,initial-scale=1,width=device-width,shrink-to-fit=no"
+  />
+  <meta
+    name="description"
+    content="Skitte A Trusted Social Media Network Were A Comfortable Community Network Is Developed."
+  />
+
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Skitte" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  {% if type %}
+  <meta property="og:type" content="{{ type }}" />
+  {% else %}
+  <meta property="og:type" content="website" />
+  {% endif %} {% if title %}
+  <meta
+    property="og:title"
+    content="Skitte | {{ title | truncatechars:20 | safe }}"
+  />
+  <meta name="twitter:description" content="{{ title }}" />
+  <meta property="og:description" content="{{ title }}" />
+  {% endif %} {% if image %}
+  <meta property="og:image" content="{{ image }}" />
+  <meta name="twitter:image" content="{{ image }}" />
+  {% else %}
+  <meta name="twitter:image" content="{% static 'media/logo/favicon.ico' %}" />
+  {% endif %}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://skitte.co/",
+      "name": "Skitte",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://skitte.co/search/₦/{search_term_string}/",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://skitte.co",
+      "name": "Skitte",
+      "logo": "{% static 'media/logo/brand/skitte-logo-brand.png' %}"
+    }
+  </script>
+  <link
+    rel="shortcut icon"
+    href="{% static 'media/logo/favicon.ico' %}"
+    type="image/x-icon"
+  />
+  <!-- Tailwind CSS -->
+  {% include 'react/css.html' %}
+  <title>{% block head_title %}{% endblock head_title %}</title>
+  {% if url %}
+  <meta property="og:url" content="https://skitte.co/{{url}}" />
+  {% elif slug %}
+  <meta property="og:url" content="https://skitte.co/{{slug}}" />
+  {% endif %}
+</head>
