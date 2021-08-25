@@ -139,3 +139,4 @@ class SkitSerializer(serializers.ModelSerializer):
     def get_video(self, obj):
         if obj.video:
             return UPLOAD_URL + obj.video
+
