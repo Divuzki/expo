@@ -73,7 +73,10 @@ class SkitCreateSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return UPLOAD_URL + obj.image.url
+            image = UPLOAD_URL + obj.image
+            image.replace("https//", "")
+            image.replace("sktmedia//", "")
+            return image
 
     def get_video(self, obj):
         if obj.video:
@@ -125,7 +128,10 @@ class SkitSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return UPLOAD_URL + obj.image
+            image = UPLOAD_URL + obj.image
+            image.replace("https//", "")
+            image.replace("sktmedia//", "")
+            return image
 
     def get_didlike(self, obj):
         didlike = False
