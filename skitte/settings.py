@@ -210,10 +210,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # For React
-# CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
+CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
 CORS_URLS_REGEX = r'^/api/.*$'
-CORS_ORIGIN_WHITELIST = ('http://localhost:3000',
-                         'http://localhost:3001', "https://www.skitte.co", "https://skitte-static.s3.amazonaws.com")
+CORS_ORIGIN_WHITELIST = ('http://localhost:3000', "https://www.skitte.co", f"https://{AWS_S3_CUSTOM_DOMAIN}")
 CSRF_COOKIE_NAME = "csrftoken"
 DEFAULT_RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',
