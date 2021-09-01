@@ -65,7 +65,7 @@ def logout_view(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
-def register_vivew(request, *args, **kwargs):
+def register_view(request, *args, **kwargs):
     form = SignupForm()  # Django User Creation Form
     nxt = request.GET.get('next')
 
@@ -94,7 +94,7 @@ def register_vivew(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
-def register_view(request):
+def register_views(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():

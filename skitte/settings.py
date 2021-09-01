@@ -191,11 +191,16 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = 'sktmedia'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
+
+    CORS_ORIGIN_WHITELIST = ("https://www.skitte.co", f"https://{AWS_S3_CUSTOM_DOMAIN}")
+
 elif not USE_S3:
     STATIC_URL = '/static/'
     MEDIA_URL = '/sktmedia/'
     STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
     MEDIA_ROOT = os.path.join(BASE_DIR, "sktmedia")
+
+    CORS_ORIGIN_WHITELIST = ('http://localhost:3000')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -212,7 +217,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 # For React
 CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
 CORS_URLS_REGEX = r'^/api/.*$'
-CORS_ORIGIN_WHITELIST = ('http://localhost:3000', "https://www.skitte.co", f"https://{AWS_S3_CUSTOM_DOMAIN}")
 CSRF_COOKIE_NAME = "csrftoken"
 DEFAULT_RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',
