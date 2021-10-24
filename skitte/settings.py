@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ['localhost', 'www.skitte.co', '192.168.137.1', 'skitte.herokuap
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
-URL = "https://skitte.herokuapp.com"
+URL = "//skitte.herokuapp.com"
 INTERNAL_IPS = ('127.0.0.1', 'localhost',
                 'www.skitte.co', 'skitte.herokuapp.com')
 # Application definition
@@ -192,7 +192,6 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = 'sktmedia'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
-    CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
 
     CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
                              f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
@@ -216,8 +215,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # For React
-if DEBUG:
-    CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
+CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
 CORS_URLS_REGEX = r'^/api/.*$'
 CSRF_COOKIE_NAME = "csrftoken"
 DEFAULT_RENDERER_CLASSES = [
