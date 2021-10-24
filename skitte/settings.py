@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'www.skitte.co']
+ALLOWED_HOSTS = ['localhost', 'www.skitte.co', '192.168.137.1']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
@@ -192,15 +192,14 @@ if USE_S3:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
 
-    CORS_ORIGIN_WHITELIST = ("https://www.skitte.co", f"https://{AWS_S3_CUSTOM_DOMAIN}")
+    CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
+                             f"https://{AWS_S3_CUSTOM_DOMAIN}")
 
 elif not USE_S3:
     STATIC_URL = '/static/'
     MEDIA_URL = '/sktmedia/'
     STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
     MEDIA_ROOT = os.path.join(BASE_DIR, "sktmedia")
-
-    CORS_ORIGIN_WHITELIST = ('http://localhost:3000')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -215,7 +214,8 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # For React
-CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
 CORS_URLS_REGEX = r'^/api/.*$'
 CSRF_COOKIE_NAME = "csrftoken"
 DEFAULT_RENDERER_CLASSES = [

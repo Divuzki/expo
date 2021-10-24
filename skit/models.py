@@ -1,17 +1,13 @@
 import os
 import textwrap
-import string
-import random
 from io import BytesIO
 from django.db.models import Q
 from django.db import models
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 
-from django.utils.text import slugify
 from django.db.models.signals import pre_save
 from skitte.utils import unique_slug_generator, image_resize
-from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 from django.core.files.storage import default_storage as storage
 
@@ -25,6 +21,12 @@ DEBUG = settings.DEBUG
 class SkitLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     skit = models.ForeignKey("Skit", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -96,7 +98,7 @@ class Skit(models.Model):
         # img.thumbnail(output_size, Image.ANTIALIAS)
         memfile = BytesIO()
         if self.image:
-            image_resize(self.image, 800, 600)
+            image_resize(self.image, 500, 600)
         elif not self.image and not self.video and not self.content and self.caption:
             caption = self.caption
             imgpath = f'contentBackgroundImage\\skt_cation\\{self.id}\\skt_cation+{caption}&id+{self.id}16-17-18@{self.user.username}_image.png'
@@ -137,6 +139,20 @@ class Skit(models.Model):
     @property
     def is_repost(self):
         return self.parent != None
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="comment_user")
+    post = models.ForeignKey(
+        Skit, related_name="comments", on_delete=models.CASCADE)
+    body = models.TextField()
+    likes = models.ManyToManyField(
+        User, related_name='comment_likes', blank=True, through=CommentLike)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '%s - %s' % (self.post.id, self.user.username)
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):

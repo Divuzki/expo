@@ -3,19 +3,18 @@
 <html lang="en">
   <title>Skitte {% block head_title %} {% endblock head_title %}</title>
   <head>
-    {% include 'components/headTags.html' with title=title image=image slug=skit_url type=type %}
+    {% include 'components/headTags.html' with title=title image=image slug=skit_url type=type %} 
     {% block css %} {% endblock css %}
   </head>
   <body>
-  <!-- <body class="background-skin"> -->
+    <!-- <body class="background-skin"> -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    {% block need_nav %}
-    {% endblock %}
+    {% block need_nav %} {% endblock %}
     <div id="sktLogo"></div>
     <!-- Not Compartable -->
     <div id="cDevice"></div>
     <div class="Skitte">
-      {% block profile-content %} {% endblock profile-content %}
+      {% block profile-content %} {% endblock profile-content %} 
       {% block content %} {% endblock content %}
       <!-- <div id="pwaInstall" class="w-full absolute bottom-0">
         <img src="{% static 'media/logo/favicon.ico' %}" width="100px" height="50px" alt="skitte logo">
@@ -23,13 +22,28 @@
       </div> -->
     </div>
     <!-- DRY => Don't Repeat Yourself -->
-    {% include 'react/base_embed.html' %}
-    {% include 'react/js.html' %}
+    {% include 'react/base_embed.html' %} {% include 'react/js.html' %} 
     {% block js %} {% endblock js %}
     <style>
-      p, h1, h2, h3, h4, h5, h6{
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         line-break: anywhere !important;
+        white-space: nowrap;
       }
     </style>
+    <script>
+      var title = document.getElementsByTagName("title")[0];
+      var extitle = document.getElementsByTagName("skt-title")[0];
+      if (extitle) var title = document.getElementsByTagName("title")[0];
+      var extitle = document.getElementsByTagName("skt-title")[0];
+      if (extitle) var ex = extitle.innerText.charAt(0).toUpperCase();
+      ex = ex + extitle.innerText.replace(extitle.innerText.charAt(0), "");
+      title.innerText = ex;
+    </script>
   </body>
 </html>
