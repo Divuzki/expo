@@ -292,8 +292,8 @@ PWA_APP_ICONS = [
         "type": "image/png"
     },
     {
-        "src": f"{STATIC_URL}media/logo/icon-384x384.png",
-        "sizes": "384x384",
+        "src": f"{STATIC_URL}media/logo/1024.png",
+        "sizes": "1024x1024",
         "type": "image/png"
     },
     {
