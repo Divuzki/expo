@@ -16,12 +16,13 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'www.skitte.co', '192.168.137.1']
+ALLOWED_HOSTS = ['localhost', 'www.skitte.co', '192.168.137.1', 'skitte.herokuapp.com']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
-URL = "https://www.skitte.co"
-INTERNAL_IPS = ('127.0.0.1', 'localhost', 'www.skitte.co')
+URL = "https://skitte.herokuapp.com"
+INTERNAL_IPS = ('127.0.0.1', 'localhost',
+                'www.skitte.co', 'skitte.herokuapp.com')
 # Application definition
 
 INSTALLED_APPS = [
@@ -193,7 +194,7 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
 
     CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
-                             f"https://{AWS_S3_CUSTOM_DOMAIN}")
+                             f"https://{AWS_S3_CUSTOM_DOMAIN}", "skitte.herokuapp.com")
 
 elif not USE_S3:
     STATIC_URL = '/static/'
