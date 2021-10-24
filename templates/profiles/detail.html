@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% block head_title %}| {{username}}{% endblock head_title %}
 {% block profile-content %}
 {% if request.user.is_authenticated %}
+<skt-title style="display: none;">{{username}}</skt-title>
 <div class="skitte-profile-badge" data-username="{{ username }}" 
 {% if request.user.username == username %}
 data-canSkit="true"
