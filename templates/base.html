@@ -41,9 +41,11 @@
       var extitle = document.getElementsByTagName("skt-title")[0];
       if (extitle) var title = document.getElementsByTagName("title")[0];
       var extitle = document.getElementsByTagName("skt-title")[0];
-      if (extitle) var ex = extitle.innerText.charAt(0).toUpperCase();
-      ex = ex + extitle.innerText.replace(extitle.innerText.charAt(0), "");
-      title.innerText = ex;
+      if (extitle){
+        var ex = extitle.innerText.charAt(0).toUpperCase();
+        ex = ex + extitle.innerText.replace(extitle.innerText.charAt(0), "");
+        title.innerText = ex;
+      } 
     </script>
   </body>
 </html>
