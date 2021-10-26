@@ -98,8 +98,9 @@ class Skit(models.Model):
         # img.thumbnail(output_size, Image.ANTIALIAS)
         memfile = BytesIO()
         if self.image:
-            image_resize(self.image, 500, 600)
+            image_resize(self.image, 500, 460)
         elif not self.image and not self.video and not self.content and self.caption:
+            print(self.id)
             caption = self.caption
             imgpath = f'contentBackgroundImage\\skt_cation\\{self.id}\\skt_cation+{caption}&id+{self.id}16-17-18@{self.user.username}_image.png'
             imgpath = f"{imgpath.replace(' ', '0')}.png"
@@ -127,9 +128,10 @@ class Skit(models.Model):
             storage.save(imgpath, memfile)
             memfile.close()
             img.close()
-            if self.pk is None:
-                Skit.objects.update(
+            if self.id is not None:
+                qs = Skit.objects.update(
                     content='', image=imgpath, caption=self.content)
+                qs.save()
             self.image = imgpath
             self.content = ''
 
