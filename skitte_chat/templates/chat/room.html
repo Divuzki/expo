@@ -1,0 +1,72 @@
+{% extends 'chat_base.html' %}
+    {% block head_title %}'{{ room_name }}' Group{% endblock head_title %}
+{% load static %}
+{% block css %} 
+<style>
+    html, body{
+        overflow:hidden;
+    }
+</style>
+{% endblock css %}
+{% block content %}
+     <div class="flex-grow h-screen flex flex-col">
+        <!-- CHAT USER VIEW -->
+        <div id="alert-box"></div>
+        <div class="w-full h-14 flex justify-between">
+          <div class="flex items-center">
+            <div class="p-3">
+                <img
+                class="w-8 h-8 border p-1 border-blue-200 rounded-full"
+                src="{{user.profile.image.url}}"
+              />
+              <div class="flex justify-center items-center w-3 h-3 relative left-6 bottom-3 bg-white rounded-full">
+                <div class="w-2 h-2 bg-green-600 rounded-full"></div>
+              </div>
+            </div>
+            <div class="mb-3">
+             <div class="text-sm">{{user.username}}</div>
+             <div class="text-xs">online</div>
+            </div>
+          </div>
+          <div class="flex items-center p-3">
+            <img src="{% static 'media/icons/skt-search-icon.svg' %}" class="w-5 h-5 mr-2" />
+            <img src="{% static 'media/icons/more.svg' %}" class="w-4 h-4" />
+          </div>
+        </div>
+
+        <!-- CHAT AREA -->
+        <div class="w-full flex-grow overflow-auto bg-blue-100" id="messages-box">
+
+      <!-- CHAT -->
+        
+        <!-- <section class="flex justify-end">
+            <div class="flex items-start justify-end sm:w-4/6 w-5/6 m-8 mr-1 break-words sm:break-all">
+              <div class="p-3 bg-yellow-200 rounded-tl-lg shadow rounded-tr-lg rounded-bl-lg">
+                <div class="text-sm">Divine Ikhuoria</div>
+              <div class="text-xs text-gray-600">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, odio.
+              </div>
+              <div class="text-gray-400" style="font-size: 8pt">
+                8 minutes ago
+              </div>
+            </div>
+            <img src="./img.jpg" class="w-8 h-8 rounded-full m-3">
+          </div>
+        </section> -->
+        
+      </div>
+      <div class="w-full h-14 flex p-3">
+        <input 
+        placeholder="Aa" 
+        type="text"
+        id="message-input"
+        class="flex-grow focus:outline-none">
+        <div class="p-1 hover:bg-green-200 flex justify-center border-r">
+          <img src="{% static 'media/icons/attachment.svg' %}" class="w-8 transform rotate-45">
+        </div>
+        <div class="p-1 hover:bg-green-200 flex justify-center rounded-lg" id="send-btn">
+          <img src="{% static 'media/icons/send.svg' %}" class="w-8">
+        </div>
+    </div>
+    </div>
+{% endblock content %}

@@ -3,17 +3,16 @@ import graphql_jwt
 from graphql_jwt.shortcuts import create_refresh_token, get_token
 from profiles.models import Profile as profile
 from graphql_auth import mutations
-from django.contrib.auth import get_user_model
+from ..models import User
 from graphene_django import DjangoObjectType
-
-User = get_user_model()
+from django.contrib.auth import login, logout, authenticate, get_user_model
 
 
 class AuthorizationError(Exception):
     """Authorization failed."""
 
 
-## Mutation: Create User
+# Mutation: Create User
 # We want to return:
 # - The new `user` entry
 # - The new associated `profile` entry - from our extended model
@@ -25,7 +24,7 @@ class AuthorizationError(Exception):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        fields = ("username", "email", "first_name", "last_name")
+        fields = ("username", "email", "first_name", "last_name", "is_active", "is_verified", "last_login" )
 
 
 class UserProfile(DjangoObjectType):
@@ -64,9 +63,35 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=user, profile=profile_obj, token=token, refresh_token=refresh_token)
 
 
+class LoginUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    profile = graphene.Field(UserProfile)
+    token = graphene.String()
+    refresh_token = graphene.String()
+
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        email = graphene.String(required=False)
+
+    def mutate(self, info, username, password, email=None):
+        user_obj = User.objects.filter(username=username).first()
+        user = authenticate(info.context, username=username, password=password)
+        print(user)
+        if user is not None:
+            login(info.context, user)
+            profile_obj = profile.objects.get(user=user.id)
+            token = get_token(user)
+            refresh_token = create_refresh_token(user)
+            return LoginUser(user=user_obj, profile=profile_obj, token=token, refresh_token=refresh_token)
+        else:
+            raise Exception('Wrong Password/Username')
+
+
 # Finalize creating mutation for schema
 class AuthMutation(graphene.ObjectType):
     create_user = CreateUser.Field()
+    login_user = LoginUser.Field()
     verify_account = mutations.VerifyAccount.Field()
     resend_activation_email = mutations.ResendActivationEmail.Field()
     send_password_reset_email = mutations.SendPasswordResetEmail.Field()
@@ -86,7 +111,7 @@ class AuthMutation(graphene.ObjectType):
     revoke_token = mutations.RevokeToken.Field()
 
 
-## Query: Find users / my own profile
+# Query: Find users / my own profile
 # Demonstrates auth block on seeing all user - only if I'm a manager
 # Demonstrates auth block on seeing myself - only if I'm logged in
 

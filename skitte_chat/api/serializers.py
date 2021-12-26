@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from skitte_chat.models import Chat, Contact
-from skitte_chat.views import get_user_contact
+from ..models import PublicChatRoom, PrivateThreadModel
+from ..views import get_user_contact
 
 
 class ContactSerializer(serializers.StringRelatedField):
@@ -9,24 +9,33 @@ class ContactSerializer(serializers.StringRelatedField):
         return value
 
 
-class ChatSerializer(serializers.ModelSerializer):
-    participants = ContactSerializer(many=True)
+class PublicChatRoomSerializer(serializers.ModelSerializer):
+    users = ContactSerializer(many=True)
 
     class Meta:
-        model = Chat
-        fields = ('id', 'messages', 'participants')
+        model = PublicChatRoom
+        fields = ('id', 'image', 'messages', 'users', 'title', 'timestamp')
         read_only = ('id')
 
     def create(self, validated_data):
         print(validated_data)
-        participants = validated_data.pop('participants')
-        chat = Chat()
+        participants = validated_data.pop('users')
+        chat = PublicChatRoom()
         chat.save()
         for username in participants:
             contact = get_user_contact(username)
             chat.participants.add(contact)
         chat.save()
         return chat
+
+
+class PrivateChatRoomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PrivateThreadModel
+        fields = ('id', 'user', 'receiver', 'messages', 'timestamp')
+        read_only = ('id')
+
 
 
 # do in python shell to see how to serialize data

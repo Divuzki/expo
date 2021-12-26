@@ -78,11 +78,11 @@ class Skit(models.Model):
     content = models.TextField(blank=True, null=True)
     caption = models.TextField(blank=True, null=True)
     image = models.ImageField(
-        _("Image"), upload_to="images/post/%Y/%m/", blank=True, null=True)
+        _("Image"), upload_to="skitte-images/post/%Y/%m/", blank=True, null=True)
     video = models.FileField(
-        _("Video"), upload_to="videos/post/%Y/%m/", blank=True, null=True)
+        _("Video"), upload_to="skitte-videos/post/%Y/%m/", blank=True, null=True)
     audio = models.FileField(
-        _("Audio"), upload_to="audios/post/%Y/%m/", blank=True, null=True)
+        _("Audio"), upload_to="skitte-audios/post/%Y/%m/", blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     objects = SkitManager()
@@ -91,6 +91,19 @@ class Skit(models.Model):
         slug = f"post/₦/{self.slug}/"
         return slug
 
+    def create_tags(self):
+        body = self.content + self.caption
+        for word in body.split():
+            if (word[0] == '#'):
+                tag = Tag.objects.filter(name=word[1:]).first()
+                if tag:
+                    self.tags.add(tag.pk)
+                else:
+                    tag = Tag(name=word[1:])
+                    tag.save()
+                    self.tags.add(tag.pk)
+                self.save()
+
     def save(self, *args, **kwargs):
         # run save of parent class above to save original image to disk
         super().save(*args, **kwargs)
@@ -98,7 +111,7 @@ class Skit(models.Model):
         # img.thumbnail(output_size, Image.ANTIALIAS)
         memfile = BytesIO()
         if self.image:
-            image_resize(self.image, 500, 460)
+            image_resize(self.image, 800, 600)
         elif not self.image and not self.video and not self.content and self.caption:
             caption = self.caption
             imgpath = f'contentBackgroundImage\\skt_cation\\{self.id}\\skt_cation+{caption}&id+{self.id}16-17-18@{self.user.username}_image.png'
@@ -111,7 +124,7 @@ class Skit(models.Model):
                 msg = msg + ii + '\n'
             msg += word_list[-1]
 
-            W, H = (800, 460)
+            W, H = (800, 600)
             img = Image.new("RGBA", (W, H), "black")
             draw = ImageDraw.Draw(img)
 
@@ -127,9 +140,12 @@ class Skit(models.Model):
             storage.save(imgpath, memfile)
             memfile.close()
             img.close()
-            if self.pk is None:
-                Skit.objects.update(
-                    content='', image=imgpath, caption=self.content)
+            if self.pk:
+                data_to_be_deleted = Skit.objects.get(id=self.pk)
+                data_to_be_deleted.delete()
+                data_to_be_created = Skit.objects.create(
+                    content='', image=imgpath, caption=caption)
+                data_to_be_created.save()
             self.image = imgpath
             self.content = ''
 
@@ -153,6 +169,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.post.id, self.user.username)
+
+
+class Image(models.Model):
+    image = models.ImageField(
+        _("Image"), upload_to="skitte-images/post/%Y/%m/", blank=True, null=True)
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):

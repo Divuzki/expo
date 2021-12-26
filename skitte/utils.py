@@ -33,7 +33,12 @@ def unique_slug_generator(instance, new_slug=None):
             text = instance.caption
         elif instance.image:
             text = f"{instance.image.size}"
-        slug = slugify(f"@{instance.user.username}-posted-{text}")
+        elif instance.title:
+            text = f"{instance.title}-desc={instance.description}"
+        if instance.user:
+            slug = slugify(f"@{instance.user.username}-posted-{text}")
+        else:
+            slug = slugify(f"@{text}")
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()
     if qs_exists:
@@ -95,3 +100,21 @@ def video_converter(video_path, resolution):
 
     # showing final clip
     clip1.ipython_display(width = 720)
+
+
+def chat_unique_slug_generator(instance, new_slug=None):
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        text = instance.timestamp
+        if instance.title:
+            text = f"{instance.title}-desc={instance.description}"
+    slug = slugify(f"@{text}#{instance.timestamp}+{instance.pk}")
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(slug=slug).exists()
+    if qs_exists:
+        new_slug = "{slug}-{randstr}".format(
+            slug=slug, randstr=random_string_generator(size=4))
+
+        return chat_unique_slug_generator(instance, new_slug=new_slug)
+    return chat_unique_slug_generator(rot13_encrypt(slug).upper().replace("-", "₦"))

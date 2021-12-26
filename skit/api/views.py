@@ -50,7 +50,6 @@ class SkitAPIView(mixins.CreateModelMixin, generics.ListAPIView):
         return qs
 
     def post(self, request, format=None):
-        print(request.data)
         skits_serializer = SkitCreateSerializer(
             data=request.data, context={'request': request})
         if skits_serializer.is_valid():
@@ -85,7 +84,6 @@ class SkitListView(generics.ListAPIView):
                            Q(parent__caption__icontains=query) |
                            Q(parent__user__username__icontains=query)
                            ).distinct()
-            print(qs)
         return qs
 
     def get_serializer_context(self, *args, **kwargs):

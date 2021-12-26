@@ -5,6 +5,7 @@
 /node_modules
 /front
 /test
+/websocket
 /.pnp
 .pnp.js
 /package.json

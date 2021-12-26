@@ -1,11 +1,9 @@
-from django.contrib.auth import get_user_model
+from accounts.models import User
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
-from .models import Message, Chat, Contact
+from .models import PublicRoomChatMessage, PublicChatRoom
 from .views import get_last_10_messages, get_user_contact, get_current_chat
-
-User = get_user_model()
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -20,8 +18,10 @@ class ChatConsumer(WebsocketConsumer):
 
     def new_message(self, data):
         user_contact = get_user_contact(data['from'])
-        message = Message.objects.create(
-            contact=user_contact,
+        room = PublicChatRoom.objects.filter(id=data['chatId']).first()
+        message = PublicRoomChatMessage.objects.create(
+            user=user_contact,
+            room=room,
             content=data['message'])
         current_chat = get_current_chat(data['chatId'])
         current_chat.messages.add(message)
@@ -30,6 +30,7 @@ class ChatConsumer(WebsocketConsumer):
             'command': 'new_message',
             'message': self.message_to_json(message)
         }
+        print(room)
         return self.send_chat_message(content)
 
     def messages_to_json(self, messages):
@@ -41,7 +42,8 @@ class ChatConsumer(WebsocketConsumer):
     def message_to_json(self, message):
         return {
             'id': message.id,
-            'author': message.contact.user.username,
+            'author': message.user.username,
+            'room': message.room.title,
             'content': message.content,
             'timestamp': str(message.timestamp)
         }
@@ -68,6 +70,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         data = json.loads(text_data)
+        print(data)
         self.commands[data['command']](self, data)
 
     def send_chat_message(self, message):

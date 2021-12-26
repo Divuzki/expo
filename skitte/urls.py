@@ -55,12 +55,16 @@ urlpatterns = [
     re_path(r'profiles?/', include('profiles.urls')),
 
     path('api/skits/', include('skit.api.urls')),
-    re_path(r'api/profiles?/', include('profiles.api.urls')),
+    path('api/auth/', AuthenticatedGraphQLView.as_view(graphiql=True, schema=schema)),
+    path('api/profiles/', include('profiles.api.urls')),
+    path('api/chat/', include('skitte_chat.api.urls')),
 
 
     # Chat
-    path('chat/', include('skitte_chat.api.urls', namespace='skitte_chat')),
+    path('chat/', include('skitte_chat.urls')),
     path('api-auth/', include('rest_framework.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
+    # path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
 
 

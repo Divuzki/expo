@@ -6,15 +6,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from django.core.mail import EmailMultiAlternatives, EmailMessage
-from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import UpdateView
-from django.utils.decorators import method_decorator
 from .tokens import account_activation_token
 from .forms import SignupForm, UserCreationForm, ConfirmPasswordForm
-
-
-from .decorators import confirm_password
 
 from django.contrib.auth import get_user_model
 
@@ -66,18 +61,18 @@ def logout_view(request, *args, **kwargs):
 
 
 def register_view(request, *args, **kwargs):
-    form = SignupForm()  # Django User Creation Form
+    form = UserCreationForm()  # Django User Creation Form
     nxt = request.GET.get('next')
 
     if request.method == "POST":
-        form = SignupForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = request.POST.get('username').lower()
+            username = request.POST.get('username')
             password = request.POST.get('password')
 
             user = authenticate(
-                request, username=username.lower(), password=password)
+                request, username=username, password=password)
 
             if user is not None:
                 login(request, user)
@@ -146,3 +141,51 @@ def activate(request, uidb64, token):
                 return redirect("/feed")
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+
+
+
+
+# Notification
+# class PostNotification(View):
+#     def get(self, request, notification_pk, post_pk, *args, **kwargs):
+#         notification = Notification.objects.get(pk=notification_pk)
+#         post = Skit.objects.get(pk=post_pk)
+
+#         notification.user_has_seen = True
+#         notification.save()
+
+#         return redirect('post-detail', pk=post_pk)
+
+
+# class FollowNotification(View):
+#     def get(self, request, notification_pk, profile_pk, *args, **kwargs):
+#         notification = Notification.objects.get(pk=notification_pk)
+#         profile = UserProfile.objects.get(pk=profile_pk)
+
+#         notification.user_has_seen = True
+#         notification.save()
+
+#         return redirect('profile', pk=profile_pk)
+
+
+# class ThreadNotification(View):
+#     def get(self, request, notification_pk, object_pk, *args, **kwargs):
+#         notification = Notification.objects.get(pk=notification_pk)
+#         thread = PrivateThreadModel.objects.get(pk=object_pk)
+
+#         notification.user_has_seen = True
+#         notification.save()
+
+#         return redirect('thread', pk=object_pk)
+
+
+# class RemoveNotification(View):
+#     def delete(self, request, notification_pk, *args, **kwargs):
+#         notification = Notification.objects.get(pk=notification_pk)
+
+#         notification.user_has_seen = True
+#         notification.save()
+
+#         return HttpResponse('Success', content_type='text/plain')

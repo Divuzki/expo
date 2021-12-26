@@ -5,13 +5,15 @@ from .views import (
     ChatDetailView,
     ChatCreateView,
     ChatUpdateView,
-    ChatDeleteView
+    ChatDeleteView,
+    RoomListView
 )
 
 app_name = 'chat'
 
 urlpatterns = [
     path('', ChatListView.as_view()),
+    path('room/', RoomListView.as_view()),
     path('create/', ChatCreateView.as_view()),
     path('<pk>', ChatDetailView.as_view()),
     path('<pk>/update/', ChatUpdateView.as_view()),
