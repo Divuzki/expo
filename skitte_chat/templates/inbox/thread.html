@@ -1,0 +1,196 @@
+{% extends 'chat_base.html' %}
+{% load static %}
+{% block css %} 
+<style>
+    html, body{
+        overflow:hidden;
+		background-color: #fff !important;
+		border: none;
+    }
+</style>
+{% endblock css %}
+{% block js %}
+<script>
+	function updateScroll(){
+        var element = document.getElementById("messages-box");
+        element.scrollTop = element.scrollHeight;
+    }
+	updateScroll();
+	document.getElementById("send-msg").addEventListener("click", () => {
+        // gets the elements by ids
+        var msg = document.getElementById("message");
+        var name = "{{user.first_name}} {{user.last_name}}";
+        var id = "{{thread.pk}}";
+		var token = "{% csrf_token %}"
+		
+        // if the message and the name aren't empty or aren't spaces,
+        if(msg.value !== "" && name.value !== "") {
+			// creates the message object
+            msgObject = {
+				'user_name': name,
+                'message': msg.value,
+				'id': parseInt(id),
+				'token': token
+            };
+
+            // emits the msgObject to the server
+            socket.emit('message', msgObject);
+        }
+
+        // clear the message element
+        msg.value = '';
+        // returns false to avoid the form to reload the page
+        return false;
+    });
+	// receives the message object from the server
+    socket.on('getMessage', function(msgObject) {
+        // gets the fields of the message
+        var name = msgObject.user_name;
+        var msg = msgObject.message;
+
+        messagesBox.innerHTML += `
+		<section class="flex justify-end">
+		<div class="flex items-start justify-end sm:w-4/6 w-5/6 m-8 mr-1 break-words sm:break-all">
+		  <div class="p-3 bg-yellow-200 rounded-tl-lg shadow rounded-tr-lg break-all rounded-bl-lg">
+            <img src="./img.jpg" class="w-8 h-8 sticky top-2 rounded-full m-3">
+            <div class="p-3 bg-gray-100 shadow rounded-tl-lg rounded-tr-lg rounded-br-lg">
+            <div class="text-sm">${name}</div>
+            <div class="text-xs text-gray-600">${msg}</div>
+            <div class="text-gray-400" style="font-size: 8pt">
+              8 minutes ago
+            </div>
+            </div>
+          </div>
+        </div>
+        </section>
+  `;
+
+        // updates the scroll
+        updateScroll();
+    });
+
+</script>
+{% endblock js %}
+{% block content %}
+
+
+<div class="flex-grow h-screen flex flex-col">
+	<!-- CHAT USER VIEW -->
+	<div class="w-full h-14 flex justify-between border-b bg-dark border-green-300">
+	  <div class="flex items-center">
+		<div class="p-3">
+		  <img
+			class="w-8 h-8 border p-1 border-blue-200 rounded-full"
+			src="{% if thread.receiver == request.user %}
+			{{ thread.user.profile.image.url }}
+		{% else %}
+			{{ thread.receiver.profile.image.url }}
+		{% endif %}"
+		  />
+		  <div class="flex justify-center items-center w-3 h-3 relative left-6 bottom-3 bg-white rounded-full">
+			<div class="w-2 h-2 bg-green-600 rounded-full"></div>
+		  </div>
+		</div>
+		<div class="mb-3">
+		 <div class="text-sm">
+			 {% if thread.receiver == request.user %}
+			{{ thread.user }}
+		{% else %}
+			{{ thread.receiver }}
+		{% endif %}
+	</div>
+		 <div class="text-xs">online</div>
+		</div>
+	  </div>
+	  <div class="flex items-center p-3">
+		<img src="{% static 'media/icons/skt-search-icon.svg' %}" class="w-5 h-5 mr-2" />
+		<img src="{% static 'media/icons/more.svg' %}" class="w-4 h-4" />
+	  </div>
+	</div>
+
+	<!-- CHAT AREA -->
+	<div class="w-full flex-grow overflow-auto bg-blue-100" id="messages-box">
+		<div id="alert-box"></div>
+		{% if message_list.all.count == 0 %}
+	<div class="row my-5">
+		<div class="col-md-12">
+			<p class="empty-text">No Messages</p>
+		</div>
+	</div>
+	{% endif %}
+  <!-- CHAT -->
+  {% for message in message_list %}
+  {% if message.receiver_user == request.user %}
+	<section class="sm:w-4/6 w-5/6">
+	  <div class="flex m-8 ml-1 break-words sm:break-all w-full">
+		<img src="{% if thread.receiver == request.user %}
+		{{ thread.user.profile.image.url }}
+	{% else %}
+		{{ thread.receiver.profile.image.url }}
+	{% endif %}" class="w-8 h-8 sticky top-2 rounded-full m-3">
+		<div class="p-3 bg-gray-100 shadow rounded-tl-lg rounded-tr-lg break-all rounded-br-lg">
+		<div class="text-sm">
+			{% if thread.receiver == request.user %}
+			{{ thread.user.first_name }} {{ thread.user.last_name }}
+		{% else %}
+			{{ thread.receiver.first_name }} {{ thread.receiver.last_name }}
+		{% endif %}
+	</div>
+		<div class="text-xs text-gray-600">
+			{{ message.body }}
+			{% if message.image %}
+			<div>
+				<img src="{{ message.image.url }}" class="message-image" />
+			</div>
+			{% endif %}
+		  </div>
+		<div class="text-gray-400" style="font-size: 8pt">
+		  {{message.date}}
+		</div>
+	  </div>
+	</div>
+	</section>
+	{% elif message.sender_user == request.user %}
+	<section class="flex justify-end">
+		<div class="flex items-start justify-end sm:w-4/6 w-5/6 m-8 mr-1 break-words sm:break-all">
+		  <div class="p-3 bg-yellow-200 rounded-tl-lg shadow rounded-tr-lg break-all rounded-bl-lg">
+			<!-- <div class="text-sm">Divine Ikhuoria</div> -->
+		  <div class="text-xs text-gray-600">
+			{{ message.body }}
+			{% if message.image %}
+			<div>
+				<img src="{{ message.image.url }}" class="message-image" />
+			</div>
+			{% endif %}
+		  </div>
+		  <div class="text-gray-400" style="font-size: 8pt">
+			{{message.date}}
+		  </div>
+		</div>
+		<!-- <img src="./img.jpg" class="w-8 h-8 rounded-full m-3"> -->
+	  </div>
+	</section>
+	{% endif %}
+	{% endfor %}
+
+  </div>
+  <form class="w-full h-14 flex p-3" id="form" enctype="multipart/form-data">
+	   <!-- method="POST" action="{% url 'create-message' thread.pk %}"> -->
+	<input 
+	placeholder="Aa" 
+	type="text"
+	name="body"
+	id="message"
+	class="flex-grow focus:outline-none mr-1 bg-transparent">
+	<input type="file" name="image" accept="image/*" class="none" id="id_image">
+	<button type="button" class="p-1 hover:bg-green-200 bg-transparent flex justify-center rounded-lg mr-1" 
+	onclick="document.getElementById('id_image').click()">
+		<img src="{% static 'media/icons/attachment.svg' %}" class="w-6 transform rotate-45">
+	</button>
+	<div style="width: 1px" class="h-full bg-gray-200"></div>
+	<button type="button" id="send-msg" class="p-1 hover:bg-green-200 bg-transparent flex justify-center rounded-lg ml-1">
+	  <img src="{% static 'media/icons/send.svg' %}" class="w-6">
+	</button>
+</form>
+</div>
+{% endblock content %}

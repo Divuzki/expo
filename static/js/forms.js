@@ -6,52 +6,57 @@ let password = document.querySelector("#pwd input");
 let password2 = document.querySelector("#pwd2");
 let stateText = document.getElementById("stateChar");
 let passwordStrength = document.getElementById("password-strength");
-let similarInfo = document.querySelector(".similar-to-username i");
-let lowUpperCase = document.querySelector(".low-upper-case i");
-let number = document.querySelector(".one-number i");
-let notFullNumber = document.querySelector(".not-full-number i");
-let specialChar = document.querySelector(".one-special-char i");
-let eightChar = document.querySelector(".eight-character i");
+let similarInfo = document.querySelector(".similar-to-username div");
+let lowUpperCase = document.querySelector(".low-upper-case div");
+let number = document.querySelector(".one-number div");
+let notFullNumber = document.querySelector(".not-full-number div");
+let specialChar = document.querySelector(".one-special-char div");
+let eightChar = document.querySelector(".eight-character div");
 let submitBtn = document.querySelector(".submit-btn");
 let BackBtn = document.querySelector(".back-btn");
 let NextBtn = document.querySelector(".next-btn");
 
 function NextFunc() {
-  BackBtn.classList.remove("none");
   NextBtn.classList.add("none");
   FirstLastName.classList.add("none");
   document.querySelector(".username").classList.add("none");
+
+  BackBtn.classList.remove("none");
   email.classList.remove("none");
   submitBtn.classList.remove("none");
   document.querySelector("#pwd").classList.remove("none");
+  document.querySelector("#pwd2").classList.remove("none");
   window.location.hash = "#next";
 }
 
 function BackFunc() {
-  BackBtn.classList.add("none");
   NextBtn.classList.remove("none");
-  submitBtn.classList.add("none");
   FirstLastName.classList.remove("none");
   document.querySelector(".username").classList.remove("none");
+
+  submitBtn.classList.add("none");
+  BackBtn.classList.add("none");
   email.classList.add("none");
   document.querySelector("#pwd").classList.add("none");
+  document.querySelector("#pwd2").classList.add("none");
   window.location.hash = "#back";
 }
+
 if (NextBtn) {
   NextBtn.addEventListener("click", NextFunc);
 }
 if (BackBtn) {
   BackBtn.addEventListener("click", BackFunc);
 }
-if (window.location.hash === "#back" || window.location.hash === "#next") {
-  if (window.location.hash === "#next") {
-    BackFunc();
-  } else {
-    NextFunc();
-  }
+if (window.location.hash === "#next") {
+  BackFunc();
+} else if (window.location.hash === "#back") {
+  NextFunc();
+} else {
+  BackFunc();
+  NextBtn.classList.add("none");
 }
 if (password2) {
-  document.querySelector("#pwd").classList.add("disabled");
   NextBtn.removeAttribute("disabled");
   NextBtn.classList.add("none");
   username.addEventListener("keyup", function () {
@@ -66,11 +71,10 @@ if (password2) {
     }
   });
   password.addEventListener("keyup", function () {
-    let pass = password.value;
-    checkStrength(pass);
+    checkStrength(password.value);
     if (
-      password.value.length > 0 &&
-      document.querySelector("#pwd").className.indexOf("none") !== 19
+      document.querySelector("#pwd").className.indexOf("none") < 0 &&
+      document.querySelector("#pwd input").value.length > 0
     ) {
       document.querySelector(".progress").classList.remove("none");
       stateText.classList.remove("none");
@@ -85,9 +89,11 @@ if (password2) {
 function toggle() {
   if (state) {
     document.getElementById("id_Password").setAttribute("type", "password");
+    document.querySelector("#pwd2 input").setAttribute("type", "password");
     state = false;
   } else {
     document.getElementById("id_Password").setAttribute("type", "text");
+    document.querySelector("#pwd2 input").setAttribute("type", "text");
     state = true;
   }
 }
@@ -109,20 +115,12 @@ function checkStrength(password) {
   //If password contains both lower and uppercase characters
   if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
     strength += 1;
-    lowUpperCase.classList.remove("fi-sr-circle");
-    lowUpperCase.classList.add("fi-sr-check");
+    lowUpperCase.classList.replace("hide-svg", "show-svg");
+    lowUpperCase.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".low-upper-case").classList.remove("none");
   } else {
-    lowUpperCase.classList.add("fi-sr-circle");
-    lowUpperCase.classList.remove("fi-sr-check");
-  }
-
-  if (username.value.length > 0 && password.indexOf(username.value) === -1) {
-    strength += 0.5;
-    similarInfo.classList.remove("fi-sr-circle");
-    similarInfo.classList.add("fi-sr-check");
-  } else {
-    similarInfo.classList.add("fi-sr-circle");
-    similarInfo.classList.remove("fi-sr-check");
+    lowUpperCase.classList.replace("bg-green-400", "bg-gray-400");
+    lowUpperCase.classList.replace("show-svg", "hide-svg");
   }
 
   //If it has numbers and characters
@@ -131,46 +129,62 @@ function checkStrength(password) {
     password.length > 0
   ) {
     strength += 1;
-    notFullNumber.classList.remove("fi-sr-circle");
-    notFullNumber.classList.add("fi-sr-check");
+    notFullNumber.classList.replace("hide-svg", "show-svg");
+    notFullNumber.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".not-full-number").classList.remove("none");
   } else {
-    notFullNumber.classList.add("fi-sr-circle");
-    notFullNumber.classList.remove("fi-sr-check");
+    notFullNumber.classList.replace("bg-green-400", "bg-gray-400");
+    notFullNumber.classList.replace("show-svg", "hide-svg");
   }
 
-  //If it has numbers and characters
+  //If it has numbers
   if (password.match(/([0-9])/)) {
     strength += 0.5;
-    number.classList.remove("fi-sr-circle");
-    number.classList.add("fi-sr-check");
+    number.classList.replace("hide-svg", "show-svg");
+    number.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".one-number").classList.remove("none");
   } else {
-    number.classList.add("fi-sr-circle");
-    number.classList.remove("fi-sr-check");
+    number.classList.replace("bg-green-400", "bg-gray-400");
+    number.classList.replace("show-svg", "hide-svg");
   }
 
   //If it has one special character
   if (password.match(/([!,%,&,@,#,$,^,*,?,_,~,₦])/)) {
     strength += 1.5;
-    specialChar.classList.remove("fi-sr-circle");
-    specialChar.classList.add("fi-sr-check");
+    specialChar.classList.replace("hide-svg", "show-svg");
+    specialChar.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".one-special-char").classList.remove("none");
   } else {
-    specialChar.classList.add("fi-sr-circle");
-    specialChar.classList.remove("fi-sr-check");
+    specialChar.classList.replace("bg-green-400", "bg-gray-400");
+    specialChar.classList.replace("show-svg", "hide-svg");
   }
 
   // If password is greater than 8
-  if (password.length > 8) {
+  if (password.length >= 8) {
     strength += 1.5;
-    eightChar.classList.remove("fi-sr-circle");
-    eightChar.classList.add("fi-sr-check");
+    eightChar.classList.replace("hide-svg", "show-svg");
+    eightChar.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".eight-character").classList.remove("none");
   } else {
-    eightChar.classList.add("fi-sr-circle");
-    eightChar.classList.remove("fi-sr-check");
+    eightChar.classList.replace("bg-green-400", "bg-gray-400");
+    eightChar.classList.replace("show-svg", "hide-svg");
   }
-  //If password is greater than 8
+  //If password is greater than 11
   if (password.length > 11) {
     strength += 1;
   }
+
+  // if password has similar text with username
+  if (username.value.length > 0 && password.indexOf(username.value) === -1) {
+    strength += 1;
+    similarInfo.classList.replace("hide-svg", "show-svg");
+    similarInfo.classList.replace("bg-gray-400", "bg-green-400");
+    document.querySelector(".similar-to-username").classList.remove("none");
+  } else {
+    similarInfo.classList.replace("bg-green-400", "bg-gray-400");
+    similarInfo.classList.replace("show-svg", "hide-svg");
+  }
+
   // If value is less than 2
   if (password.length < 1) {
     passwordStrength.classList.remove("progress-bar-warning");
@@ -225,7 +239,7 @@ function checkStrength(password) {
     stateText.classList.remove("bg-yellow-900");
     stateText.classList.remove("bg-green");
     passwordStrength.style = "width: 70%";
-  } else if (strength === 6 || strength === 6.5) {
+  } else if (strength === 6) {
     passwordStrength.classList.add("progress-bar-success");
     passwordStrength.classList.remove("progress-bar-danger");
     passwordStrength.classList.remove("progress-bar-warning");
@@ -237,7 +251,7 @@ function checkStrength(password) {
     stateText.classList.remove("bg-yellow-900");
     stateText.classList.remove("bg-green");
     passwordStrength.style = "width: 80%";
-  } else if (strength === 7) {
+  } else if (strength > 6 || strength === 6.5) {
     passwordStrength.classList.remove("progress-bar-warning");
     passwordStrength.classList.remove("progress-bar-danger");
     passwordStrength.classList.add("progress-bar-success");
@@ -250,5 +264,4 @@ function checkStrength(password) {
     stateText.classList.add("bg-green");
     passwordStrength.style = "width: 100%";
   }
-  console.log(strength);
 }

@@ -83,19 +83,11 @@ self.addEventListener("fetch", (event) => {
 
 var staticCacheName = "skitte-pwa-v" + new Date().getTime();
 var host = self.location.host;
-if (self.location.hostname !== "localhost")
-  host = "//d3sk8vjenfxgtm.cloudfront.net";
-else host = "//localhost:8000";
 const staticAssets = [
-  "/base_layout/",
   "/offline.html",
   `${host}/static/media/logo/favicon.ico`,
   `${host}/static/media/logo/brand/skitte-logo-brand.png`,
   `${host}/static/css/tailwind.min.css`,
-  `${host}/static/js/2.30b0afdc.chunk.js`,
-  `${host}/static/js/main.2a9ce9c4.chunk.js`,
-  `${host}/static/css/main.62f4f8a2.chunk.css`,
-  "https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css",
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="756.561" height="673.263" viewBox="0 0 756.561 673.263">
+  <g id="skt-search-icon" transform="translate(-694.719 -244.331)">
+    <line id="Line" x2="241.952" y2="180.177" transform="translate(1200.232 728.321)" fill="none" stroke="#9c9c9c" stroke-linecap="round" stroke-width="13"/>
+    <g id="circle" transform="translate(694.719 655.973) rotate(-60)" fill="none" stroke="#9c9c9c" stroke-width="20">
+      <ellipse cx="237.662" cy="242.81" rx="237.662" ry="242.81" stroke="none"/>
+      <ellipse cx="237.662" cy="242.81" rx="227.662" ry="232.81" fill="none"/>
+    </g>
+  </g>
+</svg>

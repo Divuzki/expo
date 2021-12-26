@@ -22,7 +22,7 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 class ProfileDetailUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'user__username'  # slug, id | path('<int:pk>\d+')
     serializer_class = PublicProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Profile.objects.all()
 
     def get_serializer_context(self, *args, **kwargs):

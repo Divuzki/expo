@@ -17,7 +17,7 @@ DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
 ALLOWED_HOSTS = ['localhost', 'www.skitte.co',
-                 '192.168.137.1', 'skitte.herokuapp.com']
+                 '192.168.137.1', 'skitte.herokuapp.com', '127.0.0.1']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
@@ -99,8 +99,10 @@ TEMPLATES = [
 ]
 
 # Channels
-ASGI_APPLICATION = 'skitte.routing.application'
 WSGI_APPLICATION = 'skitte.wsgi.application'
+ASGI_APPLICATION = "skitte.asgi.application"
+
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -209,11 +211,11 @@ STATICFILES_DIRS = [
 
 
 # Mail
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # For React
 CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
@@ -231,9 +233,9 @@ if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    DEFAULT_AUTHENTICATION_CLASSES += [
-        'skitte.rest_api.dev.DevAuthentication'
-    ]
+    # DEFAULT_AUTHENTICATION_CLASSES += [
+    #     'skitte.rest_api.dev.DevAuthentication'
+    # ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES

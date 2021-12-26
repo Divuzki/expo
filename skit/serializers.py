@@ -46,12 +46,13 @@ class SkitCreateSerializer(serializers.ModelSerializer):
             'likes',
             'reposts',
             'didlike',
-            'date', 
-           'timestamp']
+            'date',
+            'timestamp']
 
     def get_date(self, obj):
-        months = ["JAN","FEB", "MARCH", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"]
-        date = f"{months[obj.timestamp.date().month]} {obj.timestamp.date().day}"
+        months = ["JAN", "FEB", "MARCH", "APR", "MAY",
+                  "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"]
+        date = f"{months[obj.timestamp.date().month -1]} {obj.timestamp.date().day}"
         return date
 
     def get_likes(self, obj):
@@ -113,9 +114,11 @@ class SkitSerializer(serializers.ModelSerializer):
             'parent',
             'date',
             'timestamp']
+
     def get_date(self, obj):
-        months = ["JAN", "FEB", "MARCH", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"]
-        date = f"{months[obj.timestamp.date().month].lower()} {obj.timestamp.date().day}"
+        months = ["JAN", "FEB", "MARCH", "APR", "MAY",
+                  "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"]
+        date = f"{months[obj.timestamp.date().month -1]} {obj.timestamp.date().day}"
         return date
 
     def get_likes(self, obj):
@@ -145,4 +148,3 @@ class SkitSerializer(serializers.ModelSerializer):
     def get_video(self, obj):
         if obj.video:
             return UPLOAD_URL + obj.video
-

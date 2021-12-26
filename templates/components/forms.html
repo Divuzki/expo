@@ -1,6 +1,6 @@
 {% load static %}
 <div class="mt-5">
-  <form method="POST">
+  <form method="POST" autocomplete="off">
     {% csrf_token %} {% if discription %}
     <p class="p-5 text-center">{{ discription }}</p>
     {% endif %} {% if form == None %} {% else %} {% if btn_label == 'SignUp' %}
@@ -137,6 +137,7 @@
             py-2
           "
           id="id_{{form.username.label}}"
+          autocomplete="true"
           required
         />
       </div>
@@ -205,6 +206,7 @@
             py-2
           "
           id="id_{{form.email.label}}"
+          autocomplete="false"
           required
         />
       </div>
@@ -222,8 +224,7 @@
     {% endif %}
 
     <!-- password -->
-    <div
-      class="flex flex-col mb-6 
+    <div class="flex flex-col mb-6 
       {% if btn_label == 'SignUp' %}none{% endif %}"
       {% if btn_label == 'SignUp' %}
       id="pwd"
@@ -280,7 +281,7 @@
             py-2
           "
           id="id_{{form.password.label}}"
-          autocomplete="off"
+          autocomplete="true"
           required
         />
 
@@ -369,38 +370,62 @@
 
         <ul class="list-unstyled">
           <li class="">
-            <span class="similar-to-username">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
-              &nbsp;Too Similar To Your Other Information
+            <span class="similar-to-username mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+              &nbsp;Not too similar to your other information
             </span>
           </li>
           <li class="">
-            <span class="low-upper-case">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
+            <span class="low-upper-case mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
               &nbsp;Lowercase &amp; Uppercase
             </span>
           </li>
           <li class="">
-            <span class="not-full-number">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
-              &nbsp;Not Entirely Numeric
+            <span class="not-full-number mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+              &nbsp;Not entirely numeric
             </span>
           </li>
           <li class="">
-            <span class="one-number">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
+            <span class="one-number mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
               &nbsp;Number (0-9)
             </span>
           </li>
           <li class="">
-            <span class="one-special-char">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
+            <span class="one-special-char mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
               &nbsp;Special Character (!@#$%^*&amp;₦)
             </span>
           </li>
           <li class="">
-            <span class="eight-character">
-              <i class="fi fi-sr-circle" aria-hidden="true"></i>
+            <span class="eight-character mb-2 flex none">
+              <div class="bg-gray-400 w-6 h-6 text-center rounded-full hide-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
               &nbsp;At least 8 Character
             </span>
           </li>
@@ -419,8 +444,15 @@
         #id_{{form.password.label}}:invalid{border: 1px solid darkred;}
       </style>
       {% endif %}
+      {% if btn_label == 'Login' %}
+  <a
+  href="forget-password/{% if nxt %}?next={{nxt}}{%endif%}"
+  class="flex justify-end font-bold text-blue-300 hover:text-blue-500 text-xs text-center font-mono"
+>
+  <span class="ml-2">forgot password?</span>
+</a>
+  {% endif %}
     </div>
-
     {% if btn_label == 'SignUp' %}
     <!-- confirm password -->
     <div class="flex flex-col mb-6 none" id="pwd2">
@@ -482,7 +514,7 @@
             w-full
             py-2
           "
-          autocomplete="off"
+          autocomplete="true"
           required
         />
       </div>

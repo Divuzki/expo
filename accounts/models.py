@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         _("username"), max_length=50, unique=True, help_text='your username must be unique. It will be public')
     email = models.EmailField(
-        _("email"), max_length=254, unique=True, help_text='E.g example@example.com')
+        _("email"), max_length=254, help_text='E.g example@example.com')
     last_login = models.DateTimeField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)
