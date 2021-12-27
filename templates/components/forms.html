@@ -83,6 +83,13 @@
       </div>
     </div>
     {% endif %}
+    {% if form.errors %}
+    <ul class="errorlist">
+        <ul class="errorlist nonfield flex justify-center">
+      <li style="margin: 0;">Invalid email or password! Please try again.</li>
+    </ul>
+</ul>
+  {% endif %}
     <!-- Username -->
     <div class="flex flex-col username mb-6">
       <label
