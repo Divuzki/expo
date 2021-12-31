@@ -1,13 +1,12 @@
 import os
-import textwrap
+from django.core.files import File
 from io import BytesIO
 from django.db.models import Q
 from django.db import models
 from django.conf import settings
-from PIL import Image, ImageDraw, ImageFont
 
 from django.db.models.signals import pre_save
-from skitte.utils import unique_slug_generator, image_resize
+from skitte.utils import unique_slug_generator, image_resize, make_text_bg
 from django.utils.translation import gettext_lazy as _
 from django.core.files.storage import default_storage as storage
 
@@ -105,49 +104,19 @@ class Skit(models.Model):
                 self.save()
 
     def save(self, *args, **kwargs):
+        if not self.image and not self.video and self.caption:
+            # create a django friendly File object
+            self.caption = make_text_bg(self)
+            if self.id is None:
+                Skit.objects.update(caption=self.caption)
+
         # run save of parent class above to save original image to disk
         super().save(*args, **kwargs)
 
-        # img.thumbnail(output_size, Image.ANTIALIAS)
-        memfile = BytesIO()
+        if self.image and self.caption:
+            File(BytesIO(), name=self.image.name)
         if self.image:
             image_resize(self.image, 800, 600)
-        elif not self.image and not self.video and not self.content and self.caption:
-            caption = self.caption
-            imgpath = f'contentBackgroundImage\\skt_cation\\{self.id}\\skt_cation+{caption}&id+{self.id}16-17-18@{self.user.username}_image.png'
-            imgpath = f"{imgpath.replace(' ', '0')}.png"
-            wrapper = textwrap.TextWrapper(width=35)
-            word_list = wrapper.wrap(text=caption)
-            msg = ''
-
-            for ii in word_list[:-1]:
-                msg = msg + ii + '\n'
-            msg += word_list[-1]
-
-            W, H = (800, 600)
-            img = Image.new("RGBA", (W, H), "black")
-            draw = ImageDraw.Draw(img)
-
-            # font = ImageFont.truetype(<font-file>, <font-size>)
-            font = ImageFont.truetype(os.path.join(
-                BASE_DIR, "static/fonts/seguiemj.ttf"), 48, layout_engine=ImageFont.LAYOUT_RAQM)
-            w, h = draw.textsize(msg, font=font)
-            draw.text(((W - w) / 2, (H-h)/2), msg,
-                      fill="#faa", font=font
-                      # , embedded_color=True
-                      )
-            img.save(memfile, 'PNG', quality=95)
-            storage.save(imgpath, memfile)
-            memfile.close()
-            img.close()
-            if self.pk:
-                data_to_be_deleted = Skit.objects.get(id=self.pk)
-                data_to_be_deleted.delete()
-                data_to_be_created = Skit.objects.create(
-                    content='', image=imgpath, caption=caption)
-                data_to_be_created.save()
-            self.image = imgpath
-            self.content = ''
 
     class Meta:
         ordering = ['-id']
