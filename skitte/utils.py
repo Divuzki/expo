@@ -19,6 +19,7 @@ def format_string(str, min_length):
         str += " "
     return str
 
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -139,7 +140,7 @@ def make_text_bg(self):
     msg = ''
 
     for ii in word_list[:-1]:
-        msg = msg + ii + '\n' + '\n'
+        msg = msg + ii + '\n'
     msg += word_list[-1]
 
     W, H = (800, 600)
@@ -152,7 +153,7 @@ def make_text_bg(self):
     w, h = draw.textsize(msg, font=font)
     draw.text(((W - w) / 2, (H-h)/2), msg,
               fill="#faa", font=font
-            #   , embedded_color=True
+              #   , embedded_color=True
               )
     img.save(memfile, 'PNG', quality=95)
     storage.save(imgpath, memfile)
