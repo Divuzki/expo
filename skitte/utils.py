@@ -14,6 +14,11 @@ from django.core.files import File
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def format_string(str, min_length):
+    while len(str) < min_length:
+        str += " "
+    return str
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -127,7 +132,7 @@ def chat_unique_slug_generator(instance, new_slug=None):
 def make_text_bg(self):
     memfile = BytesIO()
     caption = self.caption
-    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{slugify({rot13_encrypt(caption)})}_image.png'
+    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{slugify({rot13_encrypt(format_string(caption, 5))})}_image.png'
     imgpath = f"{imgpath.replace(' ', '0')}.png"
     wrapper = textwrap.TextWrapper(width=35)
     word_list = wrapper.wrap(text=caption)
