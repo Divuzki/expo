@@ -2,10 +2,16 @@ from moviepy.editor import *
 import string
 from django.utils.text import slugify
 import random
-from django.core.files import File
 from pathlib import Path
 from PIL import Image
 from io import BytesIO
+import textwrap
+from PIL import Image, ImageDraw, ImageFont
+from django.core.files.storage import default_storage as storage
+from django.core.files import File
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
@@ -14,13 +20,14 @@ def random_string_generator(size=10, chars=string.ascii_lowercase + string.digit
 
 # ROT13 ENCRYPTION
 rot13trans = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-                       'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
+                           'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
 
 # Function to translate plain text
 
 
 def rot13_encrypt(text):
-   return text.translate(rot13trans)
+    return text.translate(rot13trans)
+
 
 def unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
@@ -33,8 +40,6 @@ def unique_slug_generator(instance, new_slug=None):
             text = instance.caption
         elif instance.image:
             text = f"{instance.image.size}"
-        elif instance.title:
-            text = f"{instance.title}-desc={instance.description}"
         if instance.user:
             slug = slugify(f"@{instance.user.username}-posted-{text}")
         else:
@@ -92,14 +97,13 @@ def video_converter(video_path, resolution):
     w1 = clip1.w
     h1 = clip1.h
 
-    print("Width x Height of clip 1 : ", end = " ")
+    print("Width x Height of clip 1 : ", end=" ")
     print(str(w1) + " x ", str(h1))
 
     print("---------------------------------------")
 
-
     # showing final clip
-    clip1.ipython_display(width = 720)
+    clip1.ipython_display(width=720)
 
 
 def chat_unique_slug_generator(instance, new_slug=None):
@@ -118,3 +122,38 @@ def chat_unique_slug_generator(instance, new_slug=None):
 
         return chat_unique_slug_generator(instance, new_slug=new_slug)
     return chat_unique_slug_generator(rot13_encrypt(slug).upper().replace("-", "₦"))
+
+
+def make_text_bg(self):
+    memfile = BytesIO()
+    caption = self.caption
+    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{slugify({rot13_encrypt(caption)})}_image.png'
+    imgpath = f"{imgpath.replace(' ', '0')}.png"
+    wrapper = textwrap.TextWrapper(width=35)
+    word_list = wrapper.wrap(text=caption)
+    msg = ''
+
+    for ii in word_list[:-1]:
+        msg = msg + ii + '\n' + '\n'
+    msg += word_list[-1]
+
+    W, H = (800, 600)
+    img = Image.new("RGBA", (W, H), "black")
+    draw = ImageDraw.Draw(img)
+
+    # font = ImageFont.truetype(<font-file>, <font-size>)
+    font = ImageFont.truetype(os.path.join(
+        BASE_DIR, "static/fonts/seguiemj.ttf"), 48, layout_engine=ImageFont.LAYOUT_RAQM)
+    w, h = draw.textsize(msg, font=font)
+    draw.text(((W - w) / 2, (H-h)/2), msg,
+              fill="#faa", font=font
+            #   , embedded_color=True
+              )
+    img.save(memfile, 'PNG', quality=95)
+    storage.save(imgpath, memfile)
+    memfile.close()
+    img.close()
+    self.content = ''
+    self.caption = ''
+    self.image = imgpath
+    return imgpath

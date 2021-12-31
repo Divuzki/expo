@@ -22,9 +22,12 @@
         c++
       )
         (f = l[c]),
-          Object.prototype.hasOwnProperty.call(o, f) && o[f] && s.push(o[f][0]),
+          Object.prototype.hasOwnProperty.call(o, f) &&
+            o[f] &&
+            s.push(o[f][0]),
           (o[f] = 0);
-      for (n in i) Object.prototype.hasOwnProperty.call(i, n) && (e[n] = i[n]);
+      for (n in i)
+        Object.prototype.hasOwnProperty.call(i, n) && (e[n] = i[n]);
       for (p && p(r); s.length; ) s.shift()();
       return u.push.apply(u, a || []), t();
     }
@@ -49,7 +52,8 @@
     (f.m = e),
       (f.c = n),
       (f.d = function (e, r, t) {
-        f.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t });
+        f.o(e, r) ||
+          Object.defineProperty(e, r, { enumerable: !0, get: t });
       }),
       (f.r = function (e) {
         "undefined" != typeof Symbol &&
