@@ -42,11 +42,18 @@ function BackFunc() {
   window.location.hash = "#back";
 }
 
+function UsernameToLower() {
+  username.value = document.getElementById("id_Username").value.toLowerCase();
+}
+UsernameToLower();
+
 if (NextBtn) {
   NextBtn.addEventListener("click", NextFunc);
+  UsernameToLower();
 }
 if (BackBtn) {
   BackBtn.addEventListener("click", BackFunc);
+  UsernameToLower();
 }
 if (window.location.hash === "#next") {
   BackFunc();
@@ -60,6 +67,7 @@ if (password2) {
   NextBtn.removeAttribute("disabled");
   NextBtn.classList.add("none");
   username.addEventListener("keyup", function () {
+    UsernameToLower();
     if (username.value.length > 0) {
       document.querySelector("#pwd").classList.remove("disabled");
       document.querySelector("#pwd2").classList.remove("disabled");
@@ -69,6 +77,7 @@ if (password2) {
       document.querySelector("#pwd2").classList.add("disabled");
       NextBtn.classList.add("none");
     }
+    UsernameToLower();
   });
   password.addEventListener("keyup", function () {
     checkStrength(password.value);
