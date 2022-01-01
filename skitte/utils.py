@@ -14,15 +14,13 @@ from django.core.files import File
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def format_string(str, min_length):
-    while len(str) < min_length:
-        str += " "
-    return str
-
-
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+def format_string(str, min_length):
+    while len(str) > min_length:
+        str += random_string_generator(size=5)
+    return str
 
 # ROT13 ENCRYPTION
 rot13trans = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
