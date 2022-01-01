@@ -76,6 +76,7 @@ class Skit(models.Model):
         User, related_name='skit_user', blank=True, through=SkitLike)
     content = models.TextField(blank=True, null=True)
     caption = models.TextField(blank=True, null=True)
+    textInImage = models.TextField(blank=True, null=True)
     image = models.ImageField(
         _("Image"), upload_to="skitte-images/post/%Y/%m/", blank=True, null=True)
     video = models.FileField(
@@ -106,6 +107,7 @@ class Skit(models.Model):
     def save(self, *args, **kwargs):
         if not self.image and not self.video and self.caption:
             # create a django friendly File object
+            self.textInImage = self.caption
             self.caption = make_text_bg(self)
             if self.id is None:
                 Skit.objects.update(caption=self.caption)
