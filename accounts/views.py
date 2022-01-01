@@ -68,7 +68,7 @@ def register_view(request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = request.POST.get('username')
+            username = request.POST.get('username').lower()
             password = request.POST.get('password')
 
             user = authenticate(
