@@ -107,9 +107,10 @@ class Skit(models.Model):
     def save(self, *args, **kwargs):
         if not self.image and not self.video and self.caption:
             # create a django friendly File object
-            self.textInImage = self.caption
-            self.caption = make_text_bg(self)
             if self.id is None:
+                self.textInImage = self.caption
+                Skit.objects.update(textInImage=self.caption)
+                self.caption = make_text_bg(self)
                 Skit.objects.update(caption=self.caption)
 
         # run save of parent class above to save original image to disk
