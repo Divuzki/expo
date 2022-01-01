@@ -43,11 +43,11 @@ def unique_slug_generator(instance, new_slug=None):
         elif instance.caption:
             text = instance.caption
         elif instance.image:
-            text = f"{instance.image.size}"
+            text = f"{instance.image.size}x{instance.image.width}"
         if instance.user:
-            slug = slugify(f"@{instance.user.username}-posted-{text}")
+            slug = slugify(f"{text}")
         else:
-            slug = slugify(f"@{text}")
+            slug = slugify(f"{text}")
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()
     if qs_exists:
