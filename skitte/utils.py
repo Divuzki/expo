@@ -130,8 +130,8 @@ def chat_unique_slug_generator(instance, new_slug=None):
 
 def make_text_bg(self):
     memfile = BytesIO()
-    caption = format_string(self.caption, 5)
-    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{slugify(rot13_encrypt(caption))}_image.png'
+    caption = self.caption
+    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{rot13_encrypt(slugify(caption))}_image.png'
     imgpath = f"{imgpath.replace(' ', '0')}.png"
     wrapper = textwrap.TextWrapper(width=35)
     word_list = wrapper.wrap(text=caption)
