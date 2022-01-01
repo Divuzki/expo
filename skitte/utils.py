@@ -130,7 +130,7 @@ def make_text_bg(self):
         msg = msg + ii + '\n'
     msg += word_list[-1]
 
-    W, H = (800, 600)
+    W, H = (600, 400)
     img = Image.new("RGBA", (W, H), "black")
     draw = ImageDraw.Draw(img)
 
