@@ -10,9 +10,17 @@ from PIL import Image, ImageDraw, ImageFont
 from django.core.files.storage import default_storage as storage
 from django.core.files import File
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+def truncate_string(value, max_length=45, suffix="skt"):
+    string_value = str(value)
+    string_truncated = string_value[:min(
+        len(string_value), (max_length - len(suffix)))]
+    suffix = (suffix if len(string_value) > max_length else '')
+    return suffix+string_truncated
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -55,7 +63,7 @@ def unique_slug_generator(instance, new_slug=None):
             slug=slug, randstr=random_string_generator(size=4))
 
         return unique_slug_generator(instance, new_slug=new_slug)
-    return rot13_encrypt(slug).upper()
+    return rot13_encrypt(truncate_string(slug)).upper()
 
 
 image_types = {
@@ -91,25 +99,6 @@ def image_resize(image, width, height):
         image.save(img_filename, file_object)
 
 
-def video_converter(video_path, resolution):
-    # Import everything needed to edit video clips
-
-    # loading video dsa gfg intro video and getting only first 5 seconds
-    clip1 = VideoFileClip("dsa_skitte.webm").subclip(0, 60)
-
-    # getting width and height of clip 1
-    w1 = clip1.w
-    h1 = clip1.h
-
-    print("Width x Height of clip 1 : ", end=" ")
-    print(str(w1) + " x ", str(h1))
-
-    print("---------------------------------------")
-
-    # showing final clip
-    clip1.ipython_display(width=720)
-
-
 def chat_unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
         slug = new_slug
@@ -125,13 +114,13 @@ def chat_unique_slug_generator(instance, new_slug=None):
             slug=slug, randstr=random_string_generator(size=4))
 
         return chat_unique_slug_generator(instance, new_slug=new_slug)
-    return chat_unique_slug_generator(rot13_encrypt(slug).upper().replace("-", "₦"))
+    return chat_unique_slug_generator(rot13_encrypt(truncate_string(slug)).upper().replace("-", "₦"))
 
 
 def make_text_bg(self):
     memfile = BytesIO()
-    caption = self.caption
-    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{rot13_encrypt(slugify(caption))}_image.png'
+    caption = rot13_encrypt(self.caption)
+    imgpath = f'skitte-images\\contentBackgroundImage\\skt_cation\\{self.user.username}\\skt_cation+{truncate_string(caption)}_image.png'
     imgpath = f"{imgpath.replace(' ', '0')}.png"
     wrapper = textwrap.TextWrapper(width=35)
     word_list = wrapper.wrap(text=caption)
@@ -161,3 +150,22 @@ def make_text_bg(self):
     self.caption = ''
     self.image = imgpath
     return imgpath
+
+
+def video_converter(video_path, resolution):
+    # Import everything needed to edit video clips
+
+    # loading video dsa gfg intro video and getting only first 5 seconds
+    clip1 = VideoFileClip("dsa_skitte.webm").subclip(0, 60)
+
+    # getting width and height of clip 1
+    w1 = clip1.w
+    h1 = clip1.h
+
+    print("Width x Height of clip 1 : ", end=" ")
+    print(str(w1) + " x ", str(h1))
+
+    print("---------------------------------------")
+
+    # showing final clip
+    clip1.ipython_display(width=720)
