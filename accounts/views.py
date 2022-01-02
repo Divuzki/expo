@@ -60,7 +60,7 @@ def logout_view(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
-def register_view(request, *args, **kwargs):
+def register_views(request, *args, **kwargs):
     form = UserCreationForm()  # Django User Creation Form
     nxt = request.GET.get('next')
 
@@ -68,7 +68,7 @@ def register_view(request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = request.POST.get('username').lower()
+            username = request.POST.get('username')
             password = request.POST.get('password')
 
             user = authenticate(
@@ -89,7 +89,7 @@ def register_view(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
-def register_views(request):
+def register_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():

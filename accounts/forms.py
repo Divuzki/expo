@@ -74,13 +74,13 @@ class UserCreationForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
-        qs = User.objects.filter(username=username.lower())
+        qs = User.objects.filter(username=username)
         if qs.exists() and username:
             raise forms.ValidationError(
                 self.error_messages['username_taken'],
                 code='username_taken',
             )
-        return username
+        return username.lower()
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password")
@@ -96,7 +96,7 @@ class UserCreationForm(forms.ModelForm):
         super()._post_clean()
         # Validate the password after self.instance is updated with form data
         # by super().
-        username = self.cleaned_data.get('username')
+        username = self.cleaned_data.get('username').lower()
         password = self.cleaned_data.get('password2')
         if password:
             try:
