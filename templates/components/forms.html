@@ -83,12 +83,14 @@
       </div>
     </div>
     {% endif %}
+    {% if btn_label == 'Login' %}
     {% if form.errors %}
     <ul class="errorlist">
         <ul class="errorlist nonfield flex justify-center">
       <li style="margin: 0;">Invalid email or password! Please try again.</li>
     </ul>
 </ul>
+  {% endif %}
   {% endif %}
     <!-- Username -->
     <div class="flex flex-col username mb-6">
@@ -685,7 +687,7 @@
       <!-- Submit Btn -->
       <button
         type="submit"
-        onclick="username.value = document.getElementById('id_Username').value.toLowerCase();"
+        onclick="UsernameToLower()"
         class="
           flex
           items-center

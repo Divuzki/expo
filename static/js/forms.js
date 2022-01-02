@@ -44,13 +44,16 @@ function BackFunc() {
 
 function UsernameToLower() {
   username.value = document.getElementById("id_Username").value.toLowerCase();
+  username.value.replace("@", "");
 }
 
 if (NextBtn) {
   NextBtn.addEventListener("click", NextFunc);
+  NextBtn.addEventListener("click", UsernameToLower);
 }
 if (BackBtn) {
   BackBtn.addEventListener("click", BackFunc);
+  BackBtn.addEventListener("click", UsernameToLower);
 }
 if (window.location.hash === "#next") {
   BackFunc();

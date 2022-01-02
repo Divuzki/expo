@@ -212,10 +212,11 @@ STATICFILES_DIRS = [
 
 # Mail
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # For React
 CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
