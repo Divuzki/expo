@@ -96,7 +96,7 @@ class UserCreationForm(forms.ModelForm):
         super()._post_clean()
         # Validate the password after self.instance is updated with form data
         # by super().
-        username = self.cleaned_data.get('username').lower()
+        username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password2')
         if password:
             try:
