@@ -37,7 +37,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     list_display = ('username', 'email', 'is_staff',
-                    'is_verified', 'last_login')
+                    'is_verified', 'is_active', 'last_login')
     list_filter = ('is_staff', 'is_superuser',
                    'is_active', 'groups', 'is_verified')
     search_fields = ('first_name', 'last_name', 'email', 'username')

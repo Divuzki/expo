@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['localhost', 'www.skitte.co',
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
-URL = "//skitte.herokuapp.com"
+URL = "//skitte.co"
 INTERNAL_IPS = ('127.0.0.1', 'localhost',
                 'www.skitte.co', 'skitte.herokuapp.com')
 # Application definition
@@ -196,8 +196,8 @@ if USE_S3:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
 
-    CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
-                             f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
+    # CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
+                            #  f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
 
 elif not USE_S3:
     STATIC_URL = '/static/'
@@ -211,12 +211,12 @@ STATICFILES_DIRS = [
 
 
 # Mail
-EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
 
 # For React
 CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
@@ -234,9 +234,9 @@ if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    DEFAULT_AUTHENTICATION_CLASSES += [
-        'skitte.rest_api.dev.DevAuthentication'
-    ]
+    # DEFAULT_AUTHENTICATION_CLASSES += [
+    #     'skitte.rest_api.dev.DevAuthentication'
+    # ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES

@@ -1,5 +1,6 @@
-from moviepy.editor import *
+from django.conf import settings
 import string
+from moviepy.editor import *
 from django.utils.text import slugify
 import random
 from pathlib import Path
@@ -10,9 +11,17 @@ from PIL import Image, ImageDraw, ImageFont
 from django.core.files.storage import default_storage as storage
 from django.core.files import File
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.utils.html import strip_tags
+from accounts.tokens import account_activation_token
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ADMIN_EMAIL = settings.EMAIL_HOST_USER
 
 
 def truncate_string(value, max_length=45, suffix="skt"):
@@ -22,21 +31,17 @@ def truncate_string(value, max_length=45, suffix="skt"):
     suffix = (suffix if len(string_value) > max_length else '')
     return suffix+string_truncated
 
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def format_string(str, min_length):
-    while len(str) > min_length:
-        str += random_string_generator(size=5)
-    return str
 
 # ROT13 ENCRYPTION
 rot13trans = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
                            'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
 
+
 # Function to translate plain text
-
-
 def rot13_encrypt(text):
     return text.translate(rot13trans)
 
@@ -169,3 +174,19 @@ def video_converter(video_path, resolution):
 
     # showing final clip
     clip1.ipython_display(width=720)
+
+
+# Account Section
+def send_activate_email(user, request, nxt=None):
+    current_site = get_current_site(request)
+    email_subject = 'Activate Your New Skitte Account.'
+    email_body = render_to_string('accounts/email_template.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'nxt': nxt
+    }, request)
+    text_content = strip_tags(email_body)
+    email = send_mail(
+        email_subject, text_content, ADMIN_EMAIL, [user.email], html_message=email_body)
