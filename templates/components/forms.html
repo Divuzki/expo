@@ -464,7 +464,8 @@
     </div>
     {% if btn_label == 'SignUp' %}
     <!-- confirm password -->
-    <div class="flex flex-col mb-6 none" id="pwd2">
+    <div class="flex flex-col mb-6 none" 
+    onclick="UsernameToLower()" id="pwd2">
       <label
         for="password2"
         class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
@@ -687,7 +688,6 @@
       <!-- Submit Btn -->
       <button
         type="submit"
-        onclick="UsernameToLower()"
         class="
           flex
           items-center

@@ -1,19 +1,15 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate, get_user_model
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_text
 from django.http import HttpResponse
-from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import UpdateView
 from .tokens import account_activation_token
-from .forms import SignupForm, UserCreationForm, ConfirmPasswordForm
-
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from .forms import UserCreationForm, ConfirmPasswordForm
+from skitte.utils import send_activate_email
+from .models import User
+import re
 
 
 # Confirming Password
@@ -60,7 +56,7 @@ def logout_view(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
-def register_views(request, *args, **kwargs):
+def register_view(request, *args, **kwargs):
     form = UserCreationForm()  # Django User Creation Form
     nxt = request.GET.get('next')
 
@@ -68,18 +64,21 @@ def register_views(request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = request.POST.get('username')
+            username = request.POST.get('username').lower()
+            usernameres = re.sub('^[A-Za-z0-9_]*$', '', username)
+            print(username)
+            print(usernameres)
             password = request.POST.get('password')
 
             user = authenticate(
                 request, username=username, password=password)
-
+            user.is_active = False
+            user.save()
+            # user = User.objects.filter(username=username)
+            print(user)
             if user is not None:
-                login(request, user)
-                if nxt:
-                    return redirect(f'/{nxt}')
-                else:
-                    return redirect("/feed")
+                send_activate_email(user, request, nxt)
+                return HttpResponse('Please confirm your email address to complete the registration')
     context = {
         "form": form,
         "btn_label": "SignUp",
@@ -87,40 +86,6 @@ def register_views(request, *args, **kwargs):
         "title": "Create A New Skitte Account"
     }
     return render(request, "accounts/auth.html", context)
-
-
-def register_view(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            nxt = request.GET.get('next')
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            mail_subject = 'Activate Your New Skitte Account.'
-            message = render_to_string('accounts/email_template.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-                'nxt': nxt
-            })
-            to_email = form.cleaned_data.get('email')
-            email = EmailMultiAlternatives(
-                    mail_subject, message, to=[to_email]
-            )
-            email.attach_alternative(message, "text/html")
-            email.send()
-            return HttpResponse('Please confirm your email address to complete the registration')
-    else:
-        form = SignupForm()
-    context = {
-        "form": form,
-        "btn_label": "SignUp",
-        "title": "Create A New Skitte Account"
-    }
-    return render(request, 'accounts/auth.html', context)
 
 
 def activate(request, uidb64, token):
@@ -141,10 +106,6 @@ def activate(request, uidb64, token):
                 return redirect("/feed")
     else:
         return HttpResponse('Activation link is invalid!')
-
-
-
-
 
 
 # Notification

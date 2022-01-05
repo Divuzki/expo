@@ -16,6 +16,8 @@ let submitBtn = document.querySelector(".submit-btn");
 let BackBtn = document.querySelector(".back-btn");
 let NextBtn = document.querySelector(".next-btn");
 
+var re = /^\w+$/;
+
 function NextFunc() {
   NextBtn.classList.add("none");
   FirstLastName.classList.add("none");
@@ -26,6 +28,12 @@ function NextFunc() {
   submitBtn.classList.remove("none");
   document.querySelector("#pwd").classList.remove("none");
   document.querySelector("#pwd2").classList.remove("none");
+  if (!re.test(username.value)) {
+    alert(
+      "only letters(0-9), alphabets(A-z) and underscores(_) are allowed in username"
+    );
+    BackFunc();
+  }
   window.location.hash = "#next";
 }
 
