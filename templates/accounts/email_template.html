@@ -490,7 +490,7 @@
                           "
                         >
                           <a
-                            href="http://{{ domain }}/activate/uid/token{% if next %}?next={{ nxt }}{% endif %}"
+                            href="http://{{ domain }}/activate/{{uid}}/{{token}}{% if next %}?next={{ nxt }}{% endif %}"
                             style="
                               -webkit-text-size-adjust: none;
                               text-decoration: none;
@@ -566,7 +566,7 @@
                             >
                               click
                               <a
-                                href="http://{{ domain }}/activate/uid/token{% if next %}?next={{ nxt }}{% endif %}"
+                                href="http://{{ domain }}/activate/{{uid}}/{{token}}{% if next %}?next={{ nxt }}{% endif %}"
                                 rel="noopener"
                                 style="
                                   text-decoration: underline;
