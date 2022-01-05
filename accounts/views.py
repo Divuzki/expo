@@ -65,7 +65,7 @@ def register_view(request, *args, **kwargs):
         if form.is_valid():
             form.save()
             username = request.POST.get('username').lower()
-            usernameres = re.sub('^[A-Za-z0-9_]*$', '', username)
+            usernameres = re.sub(r"^[A-Za-z0-9_]*$", '', username)
             print(username)
             print(usernameres)
             password = request.POST.get('password')
