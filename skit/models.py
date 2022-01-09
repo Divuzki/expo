@@ -118,7 +118,7 @@ class Skit(models.Model):
 
         if self.image and self.caption:
             File(BytesIO(), name=self.image.name)
-        if self.image:
+        elif self.image and not self.caption:
             image_resize(self.image, 800, 600)
 
     class Meta:
