@@ -19,9 +19,9 @@ class PublicChatRoom(models.Model):
     created_by = models.ForeignKey(
         User, related_name="room_created_by", on_delete=models.CASCADE)
     users = models.ManyToManyField(
-        Profile, blank=True, related_name='chats', help_text="user who are online")
+        User, blank=True, related_name='chats', help_text="user who are online")
     admins = models.ManyToManyField(
-        Profile, blank=True, help_text="user who are admin", related_name="room_admin")
+        User, blank=True, help_text="user who are admin", related_name="room_admin")
     messages = models.ManyToManyField("PublicRoomChatMessage", blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
 
