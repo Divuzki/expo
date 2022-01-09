@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 
     # my app
     'skit',
-    'skitte_chat',
+    # 'skitte_chat',
     'accounts',
     'profiles',
 ]
