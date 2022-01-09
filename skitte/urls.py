@@ -57,7 +57,7 @@ urlpatterns = [
     path('api/skits/', include('skit.api.urls')),
     path('api/auth/', AuthenticatedGraphQLView.as_view(graphiql=True, schema=schema)),
     path('api/profiles/', include('profiles.api.urls')),
-    # path('api/chat/', include('skitte_chat.api.urls')),
+    path('api/chat/', include('skitte_chat.api.urls')),
 
 
     # Chat
