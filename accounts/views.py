@@ -74,8 +74,6 @@ def register_view(request, *args, **kwargs):
                 request, username=username, password=password)
             user.is_active = False
             user.save()
-            # user = User.objects.filter(username=username)
-            print(user)
             if user is not None:
                 send_activate_email(user, request, nxt)
                 return HttpResponse('Please confirm your email address to complete the registration')

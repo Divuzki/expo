@@ -188,5 +188,5 @@ def send_activate_email(user, request, nxt=None):
         'nxt': nxt
     }, request)
     text_content = strip_tags(email_body)
-    email = send_mail(
+    send_mail(
         email_subject, text_content, ADMIN_EMAIL, [user.email], html_message=email_body)
