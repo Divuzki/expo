@@ -15,7 +15,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import send_mail
+import threading
 from django.utils.html import strip_tags
 from accounts.tokens import account_activation_token
 
@@ -177,6 +178,16 @@ def video_converter(video_path, resolution):
 
 
 # Account Section
+class EmailThread(threading.Thread):
+
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send()
+
+
 def send_activate_email(user, request, nxt=None):
     current_site = get_current_site(request)
     email_subject = 'Activate Your New Skitte Account.'
@@ -188,5 +199,8 @@ def send_activate_email(user, request, nxt=None):
         'nxt': nxt
     }, request)
     text_content = strip_tags(email_body)
-    send_mail(
+    email = send_mail(
         email_subject, text_content, ADMIN_EMAIL, [user.email], html_message=email_body)
+
+    if not settings.DEBUG:
+        EmailThread(email).start()
