@@ -6,7 +6,7 @@
     var skitUrl = match.groups.skiturl,
       appEL = document.getElementById("skitte");
     if (appEL) {
-      appEL.className = "user-profile";
+      appEL.class = "user-profile";
       var skitEL = `<div class="skitte-detail" data-skit-url="${skitUrl}" data-class-name="col-6 mx-auto"></div>`,
         mainContainer = document.getElementById("skit-container");
       skitEL && (mainContainer.innerHTML = skitEL);

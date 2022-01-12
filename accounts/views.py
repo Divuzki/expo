@@ -72,7 +72,6 @@ def register_view(request, *args, **kwargs):
 
             user = authenticate(
                 request, username=username, password=password)
-            user.is_active = False
             user.save()
             if user is not None:
                 send_activate_email(user, request, nxt)
@@ -94,7 +93,7 @@ def activate(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
+        user.is_email_verified = True
         user.save()
         login(request, user)
         if user is not None:
