@@ -20,6 +20,23 @@
         <button id="InstallBtn" class="w-10">Install</button>
       </div> -->
     </div>
+    <div
+    class="image-viewer-overlay w-full h-screen fixed top-0 left-0 bg-gray-200 none"
+  ></div>
+  <div class="image-viewer w-full h-screen fixed top-0 left-0 none">
+    <div
+      class="image-viewer-close absolute right-0 mr-2 cursor-pointer pointer-events-auto hover:text-red-200"
+    >
+      +
+    </div>
+    <figure class="image-viewer-figure bg-contain pointer-events-none">
+      <img
+        src="#"
+        alt="#"
+        class="m-auto h-screen image-viewer-image opacity-0 pointer-events-auto"
+      />
+    </figure>
+  </div>
     <!-- DRY => Don't Repeat Yourself -->
     {% include 'react/base_embed.html' %} {% include 'react/js.html' %} 
     {% block js %} {% endblock js %}
