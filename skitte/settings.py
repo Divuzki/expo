@@ -197,7 +197,7 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
 
     # CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
-                            #  f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
+    #  f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
 
 elif not USE_S3:
     STATIC_URL = '/static/'
