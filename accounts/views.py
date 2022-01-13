@@ -9,6 +9,7 @@ from .tokens import account_activation_token
 from .forms import UserCreationForm, ConfirmPasswordForm
 from skitte.utils import send_activate_email
 from .models import User
+from helpers.decorators import auth_user_should_not_access
 import re
 
 
@@ -23,7 +24,7 @@ class ConfirmPasswordView(UpdateView):
     def get_success_url(self):
         return self.request.get_full_path()  # Getting the full url
 
-
+@auth_user_should_not_access
 def login_view(request, *args, **kwargs):
     form = AuthenticationForm(request, data=request.POST or None)
     nxt = request.GET.get('next')
@@ -56,6 +57,7 @@ def logout_view(request, *args, **kwargs):
     return render(request, "accounts/auth.html", context)
 
 
+@auth_user_should_not_access
 def register_view(request, *args, **kwargs):
     form = UserCreationForm()  # Django User Creation Form
     nxt = request.GET.get('next')
@@ -66,7 +68,6 @@ def register_view(request, *args, **kwargs):
             form.save()
             username = request.POST.get('username').lower()
             usernameres = re.sub(r"^[A-Za-z0-9_]*$", '', username)
-            print(username)
             print(usernameres)
             password = request.POST.get('password')
 
@@ -76,13 +77,13 @@ def register_view(request, *args, **kwargs):
             if user is not None:
                 try:
                     send_activate_email(user, request, nxt)
+                    return HttpResponse('Please confirm your email address to complete the registration')
                 except:
                     login(request, user)
                     if nxt:
                         return redirect(f"/{nxt}")
                     else:
                         return redirect("/")
-                return HttpResponse('Please confirm your email address to complete the registration')
     context = {
         "form": form,
         "btn_label": "SignUp",
