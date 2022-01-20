@@ -11,6 +11,8 @@
     {% block need_nav %} {% endblock %}
     <div id="sktLogo"></div>
     <!-- Not Compartable -->
+    {% if user.is_authenticated %}
+    {% else %}
     <div class="skt-alert-overlay none"></div>
       <div class="skt-alert-wrap none">
       <div class="skt-alert absolute p-3 rounded-lg">
@@ -18,6 +20,7 @@
         <div class="flex justify-end mt-7 skt-alert-btn"></div>
       </div>
     </div>
+    {% endif %}
     <div id="cDevice"></div>
     <div class="Skitte">
       {% block profile-content %} {% endblock profile-content %} 
