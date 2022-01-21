@@ -8,7 +8,7 @@
   <meta name="application-name" content="Skitte" />
 
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#4CAF50" />
+  <meta name="theme-color" content="#B6f664" />
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -46,20 +46,38 @@
   />
 
   <!-- Tile for Win8 -->
-  <meta name="msapplication-TileColor" content="#0C0C0C" />
+  <meta name="msapplication-TileColor" content="#B6f664" />
 
   <meta
     name="msapplication-TileImage"
     content="/static/media/skitte-logo-curve-rectangle.png"
   />
 
+  {% if image %}
   <link
-    rel="icon"
-    sizes=""
-    href="{% static 'media/skitte-logo-curve-rectangle.png' %}"
-  />
+  rel="icon"
+  sizes=""
+  href="{{ image }}"
+/>
+  <link
+rel="shortcut icon"
+href="{{ image }}"
+type="image/x-icon"
+/>
+  {% else %}
+  <link
+  rel="icon"
+  sizes=""
+  href="{% static 'media/skitte-logo-curve-rectangle.png' %}"
+/>
+<link
+rel="shortcut icon"
+href="{% static 'media/logo/favicon.ico' %}"
+type="image/x-icon"
+/>
+  {% endif %}
 
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
     // Initialize the service worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
@@ -82,7 +100,7 @@
           }
         );
     }
-  </script>
+  </script> -->
   <meta charset="UTF-8" />
   <meta
     name="apple-mobile-web-app-status-bar-style"
@@ -92,10 +110,17 @@
     name="viewport"
     content="minimum-scale=1,initial-scale=1,width=device-width,shrink-to-fit=no"
   />
+  {% if title %}
+  <meta
+  property="description"
+  content="Skitte | {{ title | truncatechars:20 | safe }}"
+/>
+{% else %}
   <meta
     name="description"
     content="Skitte A Trusted Social Media Network Were A Comfortable Community Network Is Developed."
   />
+{% endif %}
 
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="Skitte" />
@@ -141,11 +166,6 @@
       "logo": "{% static 'media/logo/brand/skitte-logo-brand.png' %}"
     }
   </script>
-  <link
-    rel="shortcut icon"
-    href="{% static 'media/logo/favicon.ico' %}"
-    type="image/x-icon"
-  />
   <!-- Tailwind CSS -->
   {% include 'react/css.html' %}
   <title>{% block head_title %}{% endblock head_title %}</title>

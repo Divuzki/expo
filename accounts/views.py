@@ -155,3 +155,7 @@ def activate(request, uidb64, token):
 #         notification.save()
 
 #         return HttpResponse('Success', content_type='text/plain')
+
+
+def credit_view(request, *args, **kwargs):
+    return redirect("https://www.linkedin.com/in/divine-ikhuoria-204b911b2/")
