@@ -17,7 +17,8 @@ from accounts.views import (
     login_view,
     logout_view,
     register_view,
-    activate
+    activate,
+    credit_view
 )
 
 from skit.views import (
@@ -50,6 +51,7 @@ urlpatterns = [
     path('login/', login_view, name="login"),
     path('logout/', logout_view, name="logout"),
     path('register/', register_view, name="signup"),
+    path('credit', credit_view, name="credit"),
     path('post/₦/<skit_url>', skits_detail_view),
 
     re_path(r'profiles?/', include('profiles.urls')),
