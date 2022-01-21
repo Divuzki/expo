@@ -3,6 +3,11 @@
     width: 350px;
   }
 }
+@media (max-width: 320px){
+.skt-form {
+    width: 300px;
+}
+}
 input {
   border-radius: 3px;
   background-color: #333;
