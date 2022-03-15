@@ -2,10 +2,10 @@ import os
 import docx
 import zipfile
 
-from django.conf import settings
+from skitte.settings import MEDIA_ROOT, MEDIA_URL
+from django.contrib import 
+from .models import Textz
 
-MEDIA_ROOT = settings.MEDIA_ROOT
-MEDIA_URL = settings.MEDIA_URL
 
 # Import images from docx
 def import_images(doc):
@@ -42,7 +42,7 @@ def relate_images(img_dir, doc_file):
     return rels
 
 
-def import_docx(Model, doc, Textz=None):
+def import_docx(Model, doc):
     # Declare variables for text extraction
     doc_file = docx.Document(doc.file)
     obj = Model()
@@ -54,16 +54,13 @@ def import_docx(Model, doc, Textz=None):
 
     # Iterate over document paragraphs
     for paragraph in doc_file.paragraphs:
-        if not Textz is None:
-            pc = Textz.objects.create(paragraph=paragraph.text)
-            pc.save()
         # If heading paragraph then create a new chapter
         if paragraph.style.name.split(' ')[0] == 'Heading':
             # If chapter is not empty, save it
             if obj.title:
                 obj.text = text
                 obj.save()
-            obj = Model.objects.create(title=os.path.basename(doc.file.name), document=doc)
+            obj = Model.objects.create(, document=doc)
             text = ''
         # If paragraph has an image, insert an image tag with the image file
         elif 'Graphic' in paragraph._p.xml:
@@ -72,6 +69,8 @@ def import_docx(Model, doc, Textz=None):
                     text += ('\n<img style="width: 50vw;" src="' + os.path.join(MEDIA_URL, 'images/word/media', rels[rId]) + '">')
         # If paragraph has text, just insert text inside paragraph tags
         else:
+            pc =Textz.objects.create(paragraph=text)
+            pc.save()
             text += ('\n<p class="paragraph">' + paragraph.text + '</p>')
     # Save the remaining object
     obj.text = text
