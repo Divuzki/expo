@@ -1,6 +1,7 @@
+import os
 from django.conf import settings
 import string
-from moviepy.editor import *
+# from moviepy.editor import *
 from django.utils.text import slugify
 import random
 from pathlib import Path
@@ -158,23 +159,23 @@ def make_text_bg(self):
     return imgpath
 
 
-def video_converter(video_path, resolution):
-    # Import everything needed to edit video clips
+# def video_converter(video_path, resolution):
+#     # Import everything needed to edit video clips
 
-    # loading video dsa gfg intro video and getting only first 5 seconds
-    clip1 = VideoFileClip("dsa_skitte.webm").subclip(0, 60)
+#     # loading video dsa gfg intro video and getting only first 5 seconds
+#     clip1 = VideoFileClip("dsa_skitte.webm").subclip(0, 60)
 
-    # getting width and height of clip 1
-    w1 = clip1.w
-    h1 = clip1.h
+#     # getting width and height of clip 1
+#     w1 = clip1.w
+#     h1 = clip1.h
 
-    print("Width x Height of clip 1 : ", end=" ")
-    print(str(w1) + " x ", str(h1))
+#     print("Width x Height of clip 1 : ", end=" ")
+#     print(str(w1) + " x ", str(h1))
 
-    print("---------------------------------------")
+#     print("---------------------------------------")
 
-    # showing final clip
-    clip1.ipython_display(width=720)
+#     # showing final clip
+#     clip1.ipython_display(width=720)
 
 
 # Account Section
