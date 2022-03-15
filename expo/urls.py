@@ -8,6 +8,6 @@ from .views import (
 
 urlpatterns = [
     path('', Home.as_view(), name='home-docx'),
-    path('upload/', Upload.as_view(), name='upload-docx'),
+    # path('upload/', Upload.as_view(), name='upload-docx'),
     path('search', Search.as_view(), name='search-docx'),
 ]
