@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView, CreateView
 from django.db.models import Q
 
-from .models import Document, Chapter
+from .models import Document, Chapter, Textz
 
 # Home page view
 
@@ -24,7 +24,7 @@ class Upload(CreateView):
 
 
 class Search(TemplateView):
-    model = Chapter
+    model = Textz
     template_name = 'p/search.html'
 
     # Get searched string or None
@@ -36,7 +36,7 @@ class Search(TemplateView):
 
     # Run the query
     def get_result(self, q, *args, **kwargs):
-        return self.model.objects.filter(Q(title__icontains=q) | Q(text__icontains=q)).distinct()
+        return self.model.objects.filter(Q(paragraph__icontains=q)).distinct()
 
     # Check if query returned anything and merge all result lists
     def get_queryset(self, *agrs, **kwargs):

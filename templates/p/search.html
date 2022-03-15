@@ -8,8 +8,7 @@
         <hr class="sidebar-divider">
         {% for result in results %}
             <div>
-                <a href="/ex#{{ result.id }}"><h3>{{ result.title|truncatewords:7 }}</h3></a>
-                <p class="lead">{{ result.text|safe|truncatewords:20 }}</p>
+                <p class="lead">{{ result.paragraph }}</p>
             </div>
         {% empty %}
         {% endfor %}
