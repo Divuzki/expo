@@ -159,3 +159,8 @@ def activate(request, uidb64, token):
 
 def credit_view(request, *args, **kwargs):
     return redirect("https://www.linkedin.com/in/divine-ikhuoria-204b911b2/")
+
+def expo_view(request, *args, **kwargs):
+    cr = request.GET.get('course')
+    if cr == "MTH 111":
+        context = {"valid": True, "file": "mth111"}

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'skitte_chat',
     'accounts',
     'profiles',
+    'expo',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

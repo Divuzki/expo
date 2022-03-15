@@ -18,7 +18,8 @@ from accounts.views import (
     logout_view,
     register_view,
     activate,
-    credit_view
+    credit_view,
+    expo_view
 )
 
 from skit.views import (
@@ -36,6 +37,8 @@ from django.views.generic import TemplateView
 UUID_CHANNEL_REGEX = r'channel/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})'
 
 urlpatterns = [
+    # Expo
+    path('ex/', include('expo.urls'), name="ex"),
     path('admin/', admin.site.urls),
     path('', include('pwa.urls')),
     path('', home_view, name="home"),
