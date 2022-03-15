@@ -1,7 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
-
+import os
 
 from .utils import import_docx, delete_docx
 
@@ -33,6 +33,8 @@ def delete_older_documents(sender, instance, **kwargs):
 # Set signal for importing .docx after uploading it
 @receiver(models.signals.post_save, sender=Document)
 def create_document(sender, instance, **kwargs):
+    Chapter.objects.create(
+                title=os.path.basename(instance.file.name), document=instance)
     import_docx(Chapter, instance, Textz)
     # Clear all blank chapters after every import
     Chapter.objects.filter(title='').delete()

@@ -196,7 +196,7 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = 'sktmedia'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
-    MEDIA_ROOT = PUBLIC_MEDIA_LOCATION
+    # MEDIA_ROOT = PUBLIC_MEDIA_LOCATION
 
     # CORS_ORIGIN_WHITELIST = ("https://www.skitte.co",
     #  f"https://{AWS_S3_CUSTOM_DOMAIN}", "https://skitte.herokuapp.com")
