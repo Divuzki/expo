@@ -35,7 +35,7 @@ def delete_older_documents(sender, instance, **kwargs):
 def create_document(sender, instance, **kwargs):
     import_docx(Chapter, instance, Textz)
     # Clear all blank chapters after every import
-    # Chapter.objects.filter(title='').delete()
+    Chapter.objects.filter(title='').delete()
 
 
 pre_save.connect(create_document, sender=Document)
