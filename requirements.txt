@@ -57,4 +57,4 @@ whitenoise==6.0.0
 zope.interface==5.4.0
 # twisted-iocpsupport==1.0.2
 psycopg2-binary
-
+gunicorn
