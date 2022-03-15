@@ -8,8 +8,6 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
 
 # Import images from docx
-
-
 def import_images(doc):
     img_dir = os.path.join(MEDIA_ROOT, 'images')
 
