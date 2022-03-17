@@ -58,10 +58,11 @@ def import_docx(Model, doc, Textz=None):
 
     # Iterate over document paragraphs
     for paragraph in doc_file.paragraphs:
-        qs = Textz.objects.filter(paragraph=paragraph.text)
-        if not Textz is None and not qs is None:
-            pc = Textz.objects.create(paragraph=paragraph.text)
-            pc.save()
+        if not Textz is None:
+            qs = Textz.objects.filter(paragraph=paragraph.text)
+            if not qs.exists():
+                pc = Textz.objects.create(paragraph=paragraph.text)
+                pc.save()
         # If heading paragraph then create a new chapter
         if paragraph.style.name.split(' ')[0] == 'Heading':
             # If chapter is not empty, save it
