@@ -6,9 +6,10 @@
     <div class="jumbotron">
         <h2>Searching {{ query }}</h2>
         <hr class="sidebar-divider">
+        <em style="color: red;">please use sense</em>
         {% for result in results %}
             <div>
-                <p class="lead">{{ result.paragraph }}</p>
+                <p class="lead">{{ result.paragraph | safe }}</p>
             </div>
         {% empty %}
         {% endfor %}

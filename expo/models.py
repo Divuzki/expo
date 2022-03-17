@@ -21,14 +21,14 @@ class Textz(models.Model):
     timestamp = timestamp = models.DateTimeField(auto_now_add=True)
 
 # Set signal to delete all document objects and it's files when another one is created
-@receiver(models.signals.pre_save, sender=Document)
-def delete_older_documents(sender, instance, **kwargs):
-    documents = Document.objects.all()
-    if documents:
-        for doc in documents:
-            delete_docx(doc)
-        Chapter.objects.all().delete()
-        documents.delete()
+# @receiver(models.signals.pre_save, sender=Document)
+# def delete_older_documents(sender, instance, **kwargs):
+#     documents = Document.objects.all()
+#     if documents:
+#         for doc in documents:
+#             delete_docx(doc)
+#         Chapter.objects.all().delete()
+#         documents.delete()
 
 # Set signal for importing .docx after uploading it
 @receiver(models.signals.post_save, sender=Document)
