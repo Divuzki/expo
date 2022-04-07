@@ -16,8 +16,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'skitte.co',
-                 '192.168.137.1', 'skitte.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'skitte.co', "www.skitte.co"
+                 '192.168.137.1']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
