@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse
 from graphene_django.views import GraphQLView
 from django.utils.decorators import method_decorator

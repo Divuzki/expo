@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from ..models import Profile, FriendRequest
+from accounts.models import User
 from graphql_auth.schema import UserQuery
 
 
@@ -27,7 +28,7 @@ class FriendRequestType(DjangoObjectType):
                 qs = FriendRequest.objects.filter(
                     from_user=self.user)
             return qs
-    
+
     def resolve_count(self, info, **kwargs):
         user = None
 
@@ -43,6 +44,7 @@ class ProfileType(DjangoObjectType):
 
     requests = graphene.List(FriendRequestType)
     received_request = graphene.List(FriendRequestType)
+    followers = graphene.List(lambda: ProfileType)
 
     class Meta:
         model = Profile
@@ -58,6 +60,12 @@ class ProfileType(DjangoObjectType):
             return qs
         except:
             return self.user.first_name
+
+    def resolve_followers(self, info):
+        username = self.user.username
+        qs = Profile.objects.filter(user__username=username).first().followers.all().values_list('username', flat=True)
+        qs = Profile.objects.filter(user__username__in=qs)
+        return qs
 
     def resolve_last_name(self, info, **kwargs):
         try:
@@ -144,3 +152,9 @@ class ProfileType(DjangoObjectType):
             print(qs)
 
         return qs
+
+    def resolve_image(self, info):
+        """Resolve post image absolute path"""
+        if self.image:
+            self.image = info.context.build_absolute_uri(self.image.url)
+        return self.image

@@ -8,7 +8,6 @@ from django.conf import settings
 from django.db.models.signals import pre_save
 from skitte.utils import unique_slug_generator, image_resize, make_text_bg
 from django.utils.translation import gettext_lazy as _
-from django.core.files.storage import default_storage as storage
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,7 +73,7 @@ class Skit(models.Model):
         User, on_delete=models.CASCADE, related_name="skits")
     likes = models.ManyToManyField(
         User, related_name='skit_user', blank=True, through=SkitLike)
-    content = models.TextField(blank=True, null=True)
+    content = models.CharField(max_length=300,blank=True, null=True)
     caption = models.TextField(blank=True, null=True)
     textInImage = models.TextField(blank=True, null=True)
     image = models.ImageField(

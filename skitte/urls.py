@@ -31,6 +31,7 @@ from skit.views import (
     base_layout,
     skitte_serviceworker,
     skitte_offline,
+    result
 )
 from django.views.generic import TemplateView
 
@@ -38,7 +39,7 @@ UUID_CHANNEL_REGEX = r'channel/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[8
 
 urlpatterns = [
     # Expo
-    path('ex/', include('expo.urls'), name="ex"),
+    # path('ex/', include('expo.urls'), name="ex"),
     path('admin/', admin.site.urls),
     path('', include('pwa.urls')),
     path('', home_view, name="home"),
@@ -62,13 +63,14 @@ urlpatterns = [
     path('api/skits/', include('skit.api.urls')),
     path('api/auth/', AuthenticatedGraphQLView.as_view(graphiql=True, schema=schema)),
     path('api/profiles/', include('profiles.api.urls')),
-    path('api/chat/', include('skitte_chat.api.urls')),
+    # path('api/chat/', include('skitte_chat.api.urls')),
 
 
     # Chat
     # path('chat/', include('skitte_chat.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('rest-auth/', include('rest_auth.urls')),
+    path('result/', result, name='result'),
     # path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
 

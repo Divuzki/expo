@@ -1,12 +1,12 @@
 import graphene
 from graphene_django import DjangoObjectType
 # from graphene_django.filter import DjangoFilterConnectionField
+from django.conf import settings
 from graphql_auth.schema import MeQuery
 
 from django.contrib.auth import get_user_model
 
 from skit.models import Skit
-from profiles.models import Profile, FriendRequest
 from profiles.models import Profile
 
 from profiles.graphql.schema import ProfileType
@@ -14,6 +14,7 @@ from accounts.graphql.schema import AuthMutation, AuthQuery as UserQuery
 
 
 User = get_user_model()
+MEDIA_URL = settings.MEDIA_URL
 
 
 class AuthorizationError(Exception):
@@ -21,7 +22,7 @@ class AuthorizationError(Exception):
 
 
 class SkitType(DjangoObjectType):
-    user = graphene.List(ProfileType)
+    user = graphene.Field(ProfileType)
     likes = graphene.Int()
     date = graphene.String()
     didlike = graphene.Boolean()
@@ -31,8 +32,14 @@ class SkitType(DjangoObjectType):
         model = Skit
 
     def resolve_user(self, info, **kwargs):
-        qs = Profile.objects.filter(user__username__iexact=self.user)
+        qs = Profile.objects.filter(user__username__iexact=self.user).first()
         return qs
+
+    def resolve_image(self, info):
+        """Resolve post image absolute path"""
+        if self.image:
+            self.image = info.context.build_absolute_uri(self.image.url)
+        return self.image
 
     def resolve_date(self, info, **kwargs):
         months = ["JAN", "FEB", "MARCH", "APR", "MAY",
@@ -43,7 +50,7 @@ class SkitType(DjangoObjectType):
     def resolve_likes(self, info, **kwargs):
         qs = self.likes.count()
         return qs
-    
+
     def resolve_didlike(self, info, **kwargs):
         didlike = False
         context = info.context
@@ -65,8 +72,9 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
         SkitType,
         first=graphene.Int(),
         skip=graphene.Int(),
-        )
+    )
     feed = graphene.List(SkitType)
+    my_profile = graphene.Field(ProfileType)
 
     def resolve_profile(self, info, username=None):
         try:
@@ -107,6 +115,11 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     def resolve_feed(self, info, **kwargs):
         user = info.context.user
         qs = Skit.objects.feed(user).order_by("-timestamp")
+        return qs
+    
+    def resolve_my_profile(self, info, **kwargs):
+        user = info.context.user
+        qs = Profile.objects.filter(user=user).first()
         return qs
 
 

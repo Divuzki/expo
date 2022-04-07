@@ -16,8 +16,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'www.skitte.co',
-                 '192.168.137.1', 'skitte.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', 'skitte.co',
+                 '192.168.137.1', 'skitte.herokuapp.com']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 
     # my app
     'skit',
-    'skitte_chat',
+    # 'skitte_chat',
     'accounts',
     'profiles',
     'expo',
@@ -237,9 +237,9 @@ if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    DEFAULT_AUTHENTICATION_CLASSES += [
-        'skitte.rest_api.dev.DevAuthentication'
-    ]
+    # DEFAULT_AUTHENTICATION_CLASSES += [
+    #     'skitte.rest_api.dev.DevAuthentication'
+    # ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
