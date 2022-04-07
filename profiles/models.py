@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from PIL import Image
-
+from skit.models import Tag as Tags
 from django.core.files.storage import default_storage as storage
 from io import BytesIO
 
@@ -65,6 +65,10 @@ class FriendRequest(models.Model):
     def __str__(self):
         return "From {}, To {} ".format(self.from_user.username, self.to_user.username)
 
+class Intrest(models.Model):
+    title = models.CharField(max_length=25)
+    tags = models.ManyToManyField(
+        Tags, related_name="tags", blank=True)
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
