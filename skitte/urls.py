@@ -10,7 +10,7 @@ from .graphql.authClass import AuthenticatedGraphQLView
 from django.views.decorators.csrf import csrf_exempt
 from skitte.graphql.schema import schema
 
-# handler404 = 'errorHandler.views.view_404'
+handler404 = 'helpers.views.handle_not_found'
 
 
 from accounts.views import (
@@ -18,8 +18,7 @@ from accounts.views import (
     logout_view,
     register_view,
     activate,
-    credit_view,
-    expo_view
+    credit_view
 )
 
 from skit.views import (
@@ -39,7 +38,7 @@ UUID_CHANNEL_REGEX = r'channel/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[8
 
 urlpatterns = [
     # Expo
-    # path('ex/', include('expo.urls'), name="ex"),
+    path('ex/', include('expo.urls'), name="ex"),
     path('admin/', admin.site.urls),
     path('', include('pwa.urls')),
     path('', home_view, name="home"),

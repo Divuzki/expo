@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="jumbotron">
-        <h1>Displaying uploaded .docx text</h1>
+        <h1 id="pass-used-teller"></h1>
         <hr class="sidebar-divider">
         {% for chapter in chapters %}
             <section id="{{ chapter.id }}">
@@ -19,4 +19,26 @@
             </h2>
         {% endfor %}
     </div>
+    <script>
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+            return "";
+        }
+        var teller = document.getElementById("pass-used-teller")
+        let used_count = parseInt(getCookie("pass-code-used"))
+        used_count = used_count === 1 ? "First Time (<span style='color: red'>1 left</span>)" : "Second Time (<span style='color: red'>last 🙅🏾‍♀️</span>)" 
+        if(used_count === "" || used_count > 2) {window.location.reload()}
+        else{teller.innerHTML = `Your Pass has been used for the ${used_count}`}
+    </script>
 {% endblock %}
