@@ -1,0 +1,28 @@
+{% extends "comp/b.html" %}
+
+{% load static %}
+
+{% block title %}Pass Code Checker{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h2>Enter Pass Code</h2>
+        {% if error %}
+        <p class="lead" style="color: rgba(222, 22, 22, 0.86)">{{error|safe}}</p>
+        {% else %}
+        <p class="lead">Enter the passcode given to you by the owner of the website!
+            <b>Note: you can only use your code twice and a code <b style="color: blueviolet">expires every 2hrs</b></b>
+        </p>
+        {% endif %}
+        <hr class="sidebar-divider">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="pass_code" id="pass-code" class="form form-control" placeholder="enter your given pass-code!" />
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Enter" class="btn btn-primary">Enter</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
