@@ -1,0 +1,69 @@
+<p class="lead">Buy Passcode For $5</p>
+<br />
+<div
+  id="paypal-button-container"
+  style="width: max-content; margin: auto"
+></div>
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=ARiOzX11dH_Co5nZ4etwqHILWydEYGI_7aiS9swJ9W5TQMo53Z6PX8jS8JSd9CQ31yjmWSOwHhXMNG_H&currency=USD"></script>
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  var csrftoken = getCookie("csrftoken");
+
+  function completePayment(transactionId) {
+    var url = "/ex/p/complete/";
+    data = { newId: `${transactionId}` };
+    let request = new Request(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-CSRFToken": csrftoken,
+      }),
+    });
+    fetch(request)
+  }
+
+  // Render the PayPal button into #paypal-button-container
+  paypal
+    .Buttons({
+      // Set up the transaction
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: [
+            {
+              amount: {
+                value: "5.00",
+              },
+            },
+          ],
+        });
+      },
+
+      // Finalize the transaction
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (orderData) {
+          // Successful capture! For demo purposes:
+          var transaction = orderData.purchase_units[0].payments.captures[0];
+          completePayment(transaction.id);
+          window.location.href = `/ex/p/complete/${transaction.id}/`
+        });
+      },
+    })
+    .render("#paypal-button-container");
+</script>

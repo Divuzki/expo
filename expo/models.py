@@ -24,6 +24,7 @@ class Textz(models.Model):
 
 class PassCode(models.Model):
     passcode = models.CharField(max_length=5, null=True, blank=True, unique=True)
+    transactionId = models.CharField(max_length=20, null=True, blank=True, unique=True)
     used_count = models.IntegerField(default=0, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
