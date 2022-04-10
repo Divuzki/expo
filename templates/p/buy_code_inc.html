@@ -5,7 +5,7 @@
   style="width: max-content; margin: auto"
 ></div>
 <!-- Include the PayPal JavaScript SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=ARiOzX11dH_Co5nZ4etwqHILWydEYGI_7aiS9swJ9W5TQMo53Z6PX8jS8JSd9CQ31yjmWSOwHhXMNG_H&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AdZYOckcdoRwK-XiplI-P2PAO8fUnthz1TodPkGgRvGi1FNCTQE6mEfHooZsuxJS2BYhxSOYb79zwk0r&currency=USD"></script>
 <script>
   function getCookie(name) {
     let cookieValue = null;
@@ -36,7 +36,9 @@
         "X-CSRFToken": csrftoken,
       }),
     });
-    fetch(request)
+    fetch(request).then(function(){
+      window.location.href = `/ex/p/complete/${transaction.id}/`
+    });
   }
 
   // Render the PayPal button into #paypal-button-container
@@ -61,7 +63,6 @@
           // Successful capture! For demo purposes:
           var transaction = orderData.purchase_units[0].payments.captures[0];
           completePayment(transaction.id);
-          window.location.href = `/ex/p/complete/${transaction.id}/`
         });
       },
     })
