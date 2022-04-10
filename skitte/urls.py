@@ -42,6 +42,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pwa.urls')),
     path('', home_view, name="home"),
+    path("defaultsite", home_view, name="default-home"),
     path('feed/', feed_view, name="feeds"),
     re_path(r'notification?s/', notify_view, name="notify"),
     path('base_layout/', base_layout),
