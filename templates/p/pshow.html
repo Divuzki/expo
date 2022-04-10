@@ -36,11 +36,11 @@
         <p class="lead">You have successfully pay for a two-time passcode from the web masters 💟</p>
         <hr class="sidebar-divider">
         {% endif %}
-        <h3>Your {% if lookup == 'no' %} New {% endif %} Passcode is <strong style="color:greenyellow;font-family: monospace;">{{code}}</strong></h3>
+        <h3>Your {% if lookup == 'no' %} New {% endif %} Passcode is <strong style="color:rgb(108, 151, 43);font-family: monospace;">{{code}}</strong></h3>
         <h3>Your Transaction ID: <strong><em style="opacity: 0.8;font-family: monospace;">{{tId}}</em></strong></h3>
         {% if lookup == 'yes' %}
         <h3>Your Passcode has been used <strong><em style="opacity: 0.9;color: blueviolet;">{{used_count}}</em> 
-            {% if used_count == 1%}time{% elif used_count == 2 %}times <b style="color:rgba(202, 56, 56, 0.802)">[LAST]</b>{% else %}
+            {% if used_count <= 1%}time{% elif used_count == 2 %}times <b style="color:rgba(202, 56, 56, 0.802)">[LAST]</b>{% else %}
             times <b style="color:red">[EXPIRED]</b>{% endif %}</strong></h3>
         {% endif %}
         <hr class="sidebar-divider">
