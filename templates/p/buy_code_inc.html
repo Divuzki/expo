@@ -1,13 +1,17 @@
-<p class="lead">Buy Passcode For $5</p>
+<h2>Buy A Passcode now!</h2>
 <br />
-<div
-  id="paypal-button-container"
-  style="width: max-content; margin: auto"
-></div>
-<!-- Include the PayPal JavaScript SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=AdZYOckcdoRwK-XiplI-P2PAO8fUnthz1TodPkGgRvGi1FNCTQE6mEfHooZsuxJS2BYhxSOYb79zwk0r&currency=USD"></script>
+<form id="paymentForm">
+  <div class="form-group">
+    <label for="email">Email To Send Transaction Confirmation</label>
+    <input type="email" class="form form-control" id="email-address" required />
+  </div>
+  <div class="form-submit">
+    <button type="submit" class="btn btn-secondary" onclick="payWithPaystack()"> Pay </button>
+  </div>
+</form>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
-  function getCookie(name) {
+    function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
       const cookies = document.cookie.split(";");
@@ -24,8 +28,7 @@
   }
 
   var csrftoken = getCookie("csrftoken");
-
-  function completePayment(transactionId) {
+    function completePayment(transactionId) {
     var url = "/ex/p/complete/";
     data = { newId: `${transactionId}` };
     let request = new Request(url, {
@@ -40,31 +43,24 @@
       window.location.href = `/ex/p/complete/${transaction.id}/`
     });
   }
-
-  // Render the PayPal button into #paypal-button-container
-  paypal
-    .Buttons({
-      // Set up the transaction
-      createOrder: function (data, actions) {
-        return actions.order.create({
-          purchase_units: [
-            {
-              amount: {
-                value: "5.00",
-              },
-            },
-          ],
-        });
-      },
-
-      // Finalize the transaction
-      onApprove: function (data, actions) {
-        return actions.order.capture().then(function (orderData) {
-          // Successful capture! For demo purposes:
-          var transaction = orderData.purchase_units[0].payments.captures[0];
-          completePayment(transaction.id);
-        });
-      },
-    })
-    .render("#paypal-button-container");
+const paymentForm = document.getElementById('paymentForm');
+paymentForm.addEventListener("submit", payWithPaystack, false);
+function payWithPaystack(e) {
+  e.preventDefault();
+  let handler = PaystackPop.setup({
+    key: 'pk_live_eff80ec289bfe7c96e1777d1f6ee61df3afcd1a0', // Replace with your public key
+    email: document.getElementById("email-address").value,
+    amount: 2000 * 100,
+    // label: "Optional string that replaces customer email"
+    onClose: function(){
+      alert('Window closed.');
+    },
+    callback: function(response){
+      let message = 'Payment complete! Reference: ' + response.reference;
+      completePayment(response.reference)
+      window.location.href = `/ex/p/complete/${response.reference}/`
+    }
+  });
+  handler.openIframe();
+}
 </script>
