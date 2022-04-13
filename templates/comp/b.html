@@ -1,70 +1,114 @@
 {% load static %}
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="This is a .docx importer website...pls don't use it for bad!">
-        <meta name="author" content="Divuzki">
-        <link rel="icon" href="https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/jBdTSWXwoWMTpzNQZMfu">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Docx Importer" />
 
-        <title>{% block title %}.docx importer{% endblock %}</title>
+    <!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#B6f664" />
 
-        <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/navbar-top-fixed/">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Docx Importer" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-        <!-- Bootstrap core CSS -->
-        <link href="{% static 'docx/css/bootstrap.min.css' %}" rel="stylesheet">
+    <meta
+      name="viewport"
+      content="minimum-scale=1,initial-scale=1,width=device-width,shrink-to-fit=no"
+    />
+    <meta
+      name="description"
+      content="This is a .docx importer website...pls don't use it for bad!"
+    />
+    <meta name="author" content="Divuzki" />
+    <link
+      rel="icon"
+      href="https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/jBdTSWXwoWMTpzNQZMfu"
+    />
 
-        <!-- Custom styles for this template -->
-        <link href="{% static 'docx/css/styles.css' %}" rel="stylesheet">
-    </head>
+    <title>{% block title %}DevDiv | .docx importer{% endblock %}</title>
 
-    <body>
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/4.0/examples/navbar-top-fixed/"
+    />
 
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="/ex">
-                {% if request.COOKIES.pass_code %}
-                HOME
-                {% else %}
-                .docx importer
-                {% endif %}
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    {% if request.COOKIES.pass_code %}
-                <li class="nav-item active">
-                    <a class="nav-link" href="/ex/end/">End Session (Logout) - {{ request.COOKIES.pass_code }}<span class="sr-only">(current)</span></a>
-                </li>
-                {%else%}
-                <li class="nav-item active">
-                    <a class="nav-link" href="/ex/look/">Check For Passcode</a>
-                </li>
-                {% endif %}
-                <li class="nav-item active">
-                    <a class="nav-link" href="/ex/buy/">Buy Passcode</a>
-                </li>
-                </ul>
-                {% if request.COOKIES.pass_code %}
-                <form class="form-inline mt-2 mt-md-0" action="/ex/search">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="query">
-                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                {% endif %}
-            </div>
-        </nav>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'docx/css/bootstrap.min.css' %}" rel="stylesheet" />
 
-        <main role="main" class="container">
-            {% block content %}{% endblock %}
-        </main>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'docx/css/styles.css' %}" rel="stylesheet" />
+  </head>
 
-        <!-- Page scripts -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script>window.jQuery || document.write('<script src="{% static 'docx/js/jquery-slim.min.js' %}"><\/script>')</script>
-        <script src="{% static 'docx/js/popper.min.js' %}"></script>
-        <script src="{% static 'docx/js/bootstrap.min.js' %}"></script>
-    </body>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="/ex">
+        {% if request.COOKIES.pass_code %} HOME {% else %} .docx importer {% endif %}
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarCollapse"
+        aria-controls="navbarCollapse"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          {% if request.COOKIES.pass_code %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/ex/end/"
+              >End Session (Logout) - {{ request.COOKIES.pass_code }}<span
+                class="sr-only"
+                >(current)</span
+              ></a
+            >
+          </li>
+          {%else%}
+          <li class="nav-item active">
+            <a class="nav-link" href="/ex/look/">Check For Passcode</a>
+          </li>
+          {% endif %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/ex/buy/">Buy Passcode</a>
+          </li>
+        </ul>
+        {% if request.COOKIES.pass_code %}
+        <form class="form-inline mt-2 mt-md-0" action="/ex/search">
+          <input
+            class="form-control mr-sm-2"
+            type="text"
+            placeholder="Search"
+            aria-label="Search"
+            name="query"
+          />
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </nav>
+
+    <main role="main" class="container">{% block content %}{% endblock %}</main>
+
+    <!-- Page scripts -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.jQuery || document.write('<script src="{% static 'docx/js/jquery-slim.min.js' %}"><\/script>')
+    </script>
+    <script src="{% static 'docx/js/popper.min.js' %}"></script>
+    <script src="{% static 'docx/js/bootstrap.min.js' %}"></script>
+  </body>
 </html>
