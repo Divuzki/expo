@@ -9,7 +9,7 @@
         {% if lookingup %}
         <h2>Look For Your Passcode</h2>
         {% if error %}
-        <p class="lead" style="color:rgb(202, 56, 56)">{{error}}</p>
+        <p class="lead" style="color:rgb(202, 56, 56)">{{error|safe}}</p>
         {% else %}
         <p class="lead">Enter the your transactionId given to you when you purchased for a passcode :)</p>
         {% endif %}

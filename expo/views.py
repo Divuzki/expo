@@ -95,7 +95,7 @@ def passcode_checker(request):
         else:
             qs = Pass.objects.filter(passcode=code).first()
             if not qs is None:
-                if qs.used_count >= 3:
+                if qs.used_count <= 2:
                     res = render(request, "p/pcheck.html", {
                         "error": "Sorry, You have exceeded your passcode usage 🙆🏾‍♂️ <strong style='color: brown;'>JUST GO AND BUY ANOTHER ONE</strong>"})
                 else:
@@ -172,7 +172,12 @@ def passcode_looker(request):
         return render(request, "p/pshow.html", {"lookingup": True})
     elif request.method == "POST":
         tId = request.POST.get('transactionId').strip()
-        return redirect(f"/ex/p/complete/{tId}/?lookup=True")
+        qs = Pass.objects.filter(transactionId=tId).first()
+        res = redirect(f"/ex/p/complete/{tId}/?lookup=True")
+        if qs.used_count <= 2:
+            res = render(request, "p/pshow.html",
+                            {"lookingup": True, "error": "This Passcode has exceeded its Limit. <b>Its has EXPIRED!</b>"})
+        return res
 
 
 def buy_code(request):
