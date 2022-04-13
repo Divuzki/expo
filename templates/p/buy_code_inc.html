@@ -50,7 +50,7 @@ function payWithPaystack(e) {
   let handler = PaystackPop.setup({
     key: 'pk_live_eff80ec289bfe7c96e1777d1f6ee61df3afcd1a0', // Replace with your public key
     email: document.getElementById("email-address").value,
-    amount: 50 * 100,
+    amount: 2000 * 100,
     // label: "Optional string that replaces customer email"
     onClose: function(){
       alert('You Just Closed Payment Window!');
