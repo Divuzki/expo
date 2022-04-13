@@ -29,7 +29,7 @@ class PassCode(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.passcode +" == "+ str(self.used_count))
+        return str(self.transactionId +" -> "+ str(self.used_count))
 
 
 # Set signal to delete all document objects and it's files when another one is created

@@ -173,9 +173,13 @@ def passcode_looker(request):
         tId = request.POST.get('transactionId').strip()
         qs = Pass.objects.filter(transactionId=tId).first()
         res = redirect(f"/ex/p/complete/{tId}/?lookup=True")
-        if qs.used_count >= 2:
+        if not qs is None:
+            if qs.used_count >= 2:
+                res = render(request, "p/pshow.html",
+                             {"lookingup": True, "error": "This Passcode has exceeded its Limit. <b>Its has EXPIRED!</b>"})
+        else:
             res = render(request, "p/pshow.html",
-                            {"lookingup": True, "error": "This Passcode has exceeded its Limit. <b>Its has EXPIRED!</b>"})
+                         {"lookingup": True, "error": "This Passcode do not exists!"})
         return res
 
 
