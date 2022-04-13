@@ -14,14 +14,12 @@ def home_view(request):
     if passcode and not passcode == "":
         qs = Pass.objects.filter(passcode=passcode).first()
         if not qs is None:
-            if qs.used_count >= 2:
+            if qs.used_count <= 2:
                 qs = Chapter.objects.all()
                 return render(request, "p/home.html", {"chapters": qs})
             else:
                 res = redirect(
                     "/ex/pchekr/?e=your+code+has+exceeded+its+usage")
-                # res.set_cookie('pass_code', False, max_age=0)
-                # res.set_cookie('pass-code-used', False, max_age=0)
                 return res
         else:
             return redirect("/ex/pchekr/")
@@ -59,7 +57,7 @@ class Search(TemplateView):
         passcode = self.request.COOKIES.get('pass_code', False)
         if passcode:
             qs = Pass.objects.filter(passcode=passcode).first()
-            if not qs is None and qs.used_count >= 2:
+            if not qs is None and qs.used_count <= 2:
                 if not self.get_query():
                     return None
                 else:
@@ -85,6 +83,8 @@ class Search(TemplateView):
 def passcode_checker(request):
     res = render(request, "p/pcheck.html")
     if request.method == "POST":
+        res.set_cookie('pass_code', False, max_age=0)
+        res.set_cookie('pass-code-used', False, max_age=0)
         passcode = request.COOKIES.get('pass_code', False)
         code = request.POST.get('pass_code').strip()
         if passcode and not passcode == "":
@@ -115,7 +115,6 @@ def passcode_checker(request):
                 res = render(request, "p/pcheck.html",
                              {"error": error})
                 res.set_cookie('try-error', True, max_age=120*120)
-
         return res
     else:
         return res
@@ -136,8 +135,8 @@ def paymentComplete(request, tId=None):
         n = body['newId']
         if n:
             qs = Pass.objects.create(transactionId=n)
-            print("BODY:", body)
-            print(qs.passcode)
+            # print("BODY:", body)
+            # print(qs.passcode)
             data = {
                 "msg": "Payment Completed!",
                 "code": qs.passcode
