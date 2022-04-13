@@ -14,7 +14,7 @@ def home_view(request):
     if passcode and not passcode == "":
         qs = Pass.objects.filter(passcode=passcode).first()
         if not qs is None:
-            if qs.used_count <= 2:
+            if qs.used_count >= 2:
                 qs = Chapter.objects.all()
                 return render(request, "p/home.html", {"chapters": qs})
             else:
@@ -59,7 +59,7 @@ class Search(TemplateView):
         passcode = self.request.COOKIES.get('pass_code', False)
         if passcode:
             qs = Pass.objects.filter(passcode=passcode).first()
-            if not qs is None and qs.used_count <= 2:
+            if not qs is None and qs.used_count >= 2:
                 if not self.get_query():
                     return None
                 else:
@@ -95,7 +95,7 @@ def passcode_checker(request):
         else:
             qs = Pass.objects.filter(passcode=code).first()
             if not qs is None:
-                if qs.used_count <= 2:
+                if qs.used_count >= 2:
                     res = render(request, "p/pcheck.html", {
                         "error": "Sorry, You have exceeded your passcode usage 🙆🏾‍♂️ <strong style='color: brown;'>JUST GO AND BUY ANOTHER ONE</strong>"})
                 else:
@@ -174,7 +174,7 @@ def passcode_looker(request):
         tId = request.POST.get('transactionId').strip()
         qs = Pass.objects.filter(transactionId=tId).first()
         res = redirect(f"/ex/p/complete/{tId}/?lookup=True")
-        if qs.used_count <= 2:
+        if qs.used_count >= 2:
             res = render(request, "p/pshow.html",
                             {"lookingup": True, "error": "This Passcode has exceeded its Limit. <b>Its has EXPIRED!</b>"})
         return res
