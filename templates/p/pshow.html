@@ -5,15 +5,14 @@
 {% block title %}{% if lookup == 'no' %}Payment Successful{% elif lookup == 'yes' %}Found Passcode!{% else %}Passcode Lookup{% endif %} {% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
         {% if lookingup %}
-        <h2>Look For Your Passcode</h2>
+        <h2 class="text-3xl font-semibold my-3">Look For Your Passcode</h2>
         {% if error %}
         <p class="lead" style="color:rgb(202, 56, 56)">{{error|safe}}</p>
         {% else %}
-        <p class="lead">Enter the your transactionId given to you when you purchased for a passcode :)</p>
+        <p class="lead font-semibold">Enter the your transactionId given to you when you purchased for a passcode :)</p>
         {% endif %}
-        <hr class="sidebar-divider">
+        <hr class="sidebar-divider my-2">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
@@ -21,18 +20,18 @@
                 type="text"
                 name="transactionId"
                 id="transactionId"
-                class="form form-control"
+                class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md"
                 placeholder="enter your transactionId!"
                 required="true"
               />
             </div>
             <div class="form-group">
-              <button type="submit" value="Lookup" class="btn btn-primary">Check</button>
+              <button type="submit" value="Lookup" class="btn btn-primary border-none shadow-md bg-blue-400">Check</button>
             </div>
           </form>
         {% else %}
         {% if lookup == 'no' %}
-        <h2>Payment Successful! 💚</h2>
+        <h2 class="text-3xl font-semibold m-2">Payment Successful! 💚</h2>
         <p class="lead">You have successfully pay for a two-time passcode from the web masters 💟</p>
         <hr class="sidebar-divider">
         {% endif %}
@@ -50,5 +49,4 @@
             <li><span>Make Sure You don't loose your TransactionId because you will be need it to <b>check for your passcode</b></span></li>
         </ul></p>
         {% endif %}
-    </div>
 {% endblock %}

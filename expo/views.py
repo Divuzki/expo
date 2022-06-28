@@ -3,20 +3,24 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, CreateView
 from django.db.models import Q
-
+from .utils import import_docx
 from .models import Document, Chapter, Textz, PassCode as Pass
 
 # Home page view
 
 
-def home_view(request):
+def home_view(request, id=None):
     passcode = request.COOKIES.get('pass_code', False)
     if passcode and not passcode == "":
         qs = Pass.objects.filter(passcode=passcode).first()
         if not qs is None:
             if qs.used_count <= 2:
-                qs = Chapter.objects.all()
-                return render(request, "p/home.html", {"chapters": qs})
+                if id:
+                    qs = Chapter.objects.filter(id=id).first()
+                    return render(request, "p/cpage.html", {"chapter": qs})
+                else:
+                    qs = Chapter.objects.all()
+                    return render(request, "p/home.html", {"chapters": qs})
             else:
                 res = redirect(
                     "/ex/pchekr/?e=your+code+has+exceeded+its+usage")
@@ -28,11 +32,15 @@ def home_view(request):
 
 
 # Uploading document page view
-class Upload(CreateView):
-    model = Document
-    template_name = 'p/upload.html'
-    fields = ['file']
-    success_url = '/ex'
+def Upload(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        file = request.FILES["file"]
+        if name and file:
+            file = Document.objects.create(file=file)
+            file.save()
+            import_docx(Chapter, file, Textz, name)
+    return render(request, "p/upload.html")
 
 # Displaying search results page view
 
@@ -91,7 +99,7 @@ def passcode_checker(request):
             code = passcode
         if code == "" or code == None:
             res = render(request, "p/pcheck.html",
-                         {"error": "You need to enter your pass guy! 🤦🏾‍♂️"})
+                         {"error": "You need to enter your passcode na! 🤦🏾‍♂️"})
         else:
             qs = Pass.objects.filter(passcode=code).first()
             if not qs is None:
@@ -185,3 +193,17 @@ def passcode_looker(request):
 
 def buy_code(request):
     return render(request, "p/buy_code.html")
+
+
+def generate_codes(request):
+    res = render(request, "p/codeG.html")
+    if request.method == "POST":
+        num = request.POST.get("num")
+        if num:
+            codes = []
+            for num in range(1, int(num)):
+                qs = Pass.objects.create()
+                qs.save()
+                codes.append(qs.passcode)
+            res = render(request, "p/codeG.html", {"codes": codes})
+    return res

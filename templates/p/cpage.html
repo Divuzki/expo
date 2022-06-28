@@ -1,26 +1,12 @@
-{% extends "comp/b.html" %} {% load static %} {% block title %}Display text{% endblock %} {% block content %}
-  <h1 class="text-3xl font-semibold" id="pass-used-teller"></h1>
-  <hr class="sidebar-divider" />
-  <ul
-    class="flex flex-wrap gap-3 my-10 mx-0 flex-row justify-start items-start"
-  >
-    {% for chapter in chapters %}
-    <li
-      onClick="window.location.href=`/ex/c/{{ chapter.id }}/`"
-      class="flex justify-center items-center bg-slate-400 cursor-pointer hover:bg-slate-800 rounded-lg shadow-md py-2 px-4"
-      id="{{ chapter.id }}"
-    >
-      <span class="text-base text-gray-200 font-semibold"
-        >{{ chapter.title }}</span
-      >
-    </li>
-    {% empty %}
-    <h2>
-      No recent past question here to show.
-      <!-- <a href="/ex/upload/">Upload a .docx file!</a> -->
-    </h2>
-    {% endfor %}
-  </ul>
+{% extends "comp/b.html" %} {% load static %} {% block title %}
+{{ chapter.title }}
+{% endblock %} {% block content %}
+    <h1 class="text-lg font-semibold" id="pass-used-teller"></h1>
+    <hr class="sidebar-divider mb-3" />
+    <h3 class="text-lg font-semibold flex justify-center">{{ chapter.title|safe }}</h3>
+  <section class="my-5 mx-0" id="{{ chapter.id }}">
+    <p class="lead text-base font-semibold">{{ chapter.text|safe }}</p>
+  </section>
 <script>
   function getCookie(cname) {
     let name = cname + "=";

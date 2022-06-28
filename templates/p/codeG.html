@@ -1,0 +1,15 @@
+{% extends "comp/b.html" %} {% load static %} {% block title %} Code Generator
+{% endblock %} 
+{% block content %}
+{% if codes %} {% for code in codes %}
+<p>{{code}}</p>
+{% endfor %} {% else %}
+<form method="post" class="flex flex-col gap-4">
+    {% csrf_token %}
+    <input type="number" class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md" name="num" />
+    <div class="form-group">
+        <button type="submit" value="create" class="btn btn-primary border-none shadow-md bg-blue-400">Create</button>
+      </div>
+</form>
+{% endif %}
+{% endblock content %}

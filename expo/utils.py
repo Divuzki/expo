@@ -8,6 +8,8 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
 
 # Import images from docx
+
+
 def import_images(doc):
     img_dir = os.path.join(MEDIA_ROOT, 'images')
 
@@ -46,7 +48,7 @@ def relate_images(img_dir, doc_file):
     return rels
 
 
-def import_docx(Model, doc, Textz=None):
+def import_docx(Model, doc, Textz=None, name=None):
     # Declare variables for text extraction
     doc_file = docx.Document(doc.file)
     obj = Model()
@@ -59,9 +61,10 @@ def import_docx(Model, doc, Textz=None):
     # Iterate over document paragraphs
     for paragraph in doc_file.paragraphs:
         if not Textz is None:
-            qs = Textz.objects.filter(paragraph=paragraph.text)
+            ex = paragraph.text.replace("ans", "<b> ans</b>").replace("ANS", " <b> ans</b>")
+            qs = Textz.objects.filter(paragraph=ex)
             if not qs.exists():
-                pc = Textz.objects.create(paragraph=paragraph.text)
+                pc = Textz.objects.create(paragraph=ex)
                 pc.save()
         # If heading paragraph then create a new chapter
         if paragraph.style.name.split(' ')[0] == 'Heading':
@@ -80,7 +83,11 @@ def import_docx(Model, doc, Textz=None):
                              os.path.join(MEDIA_URL, 'images/word/media', rels[rId]) + '">')
         # If paragraph has text, just insert text inside paragraph tags
         else:
-            text += ('\n<p class="paragraph">' + paragraph.text + '</p>')
+            text += ('\n<p class="lead text-base font-semibold">' +
+                     paragraph.text.replace("ans", "<b> ans</b>").replace("ANS", " <b> ans</b>") + '</p>')
+    if name:
+        obj = Model.objects.create(title=name, document=doc)
+        obj.save()
     # Save the remaining object
     obj.text = text
     obj.save()
