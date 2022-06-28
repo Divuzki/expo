@@ -3,7 +3,6 @@
 {% block title %}Searching {{ query }}{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
         <h2>Searching {{ query }}</h2>
         <hr class="sidebar-divider">
         <em style="color: red;">Note: please use sense</em>
@@ -13,5 +12,4 @@
             </div>
         {% empty %}
         {% endfor %}
-    </div>
 {% endblock %}

@@ -5,7 +5,6 @@ import string
 from django.utils.text import slugify
 import random
 from pathlib import Path
-from PIL import Image
 from io import BytesIO
 import textwrap
 from PIL import Image, ImageDraw, ImageFont

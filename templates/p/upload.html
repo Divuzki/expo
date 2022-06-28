@@ -1,20 +1,23 @@
-{% extends "comp/b.html" %}
-
-{% load static %}
-
-{% block title %}Upload .docx{% endblock %}
-
-{% block content %}
-    <div class="jumbotron">
-        <h2>Upload a .docx file</h2>
-        <p class="lead">It's important to notice that the .docx file has to be separated between Header and Normal style paragraphs.</p>
-        <hr class="sidebar-divider">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-group">
-                <button type="submit" value="Save" class="btn btn-primary">Upload</button>
-            </div>
-        </form>
+{% extends "comp/b.html" %} {% load static %} {% block title %}Upload .docx{%endblock %} {% block content %}
+  <h2 class="text-3xl font-semibold my-3">Upload a .docx file</h2>
+  <p class="lead text-base">
+    It's important to notice that the .docx file has to be separated between
+    Header and Normal style paragraphs.
+  </p>
+  <hr class="sidebar-divider mb-3" />
+  <form
+    method="POST"
+    class="m-auto flex flex-col gap-2 justify-center items-center py-3 px-2 border bg-slate-300 rounded-lg"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <div class="flex flex-col w-full justify-start">
+      <label class="text-base font-semibold">Chapter Name:</label>
+      <input type="text" class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md" placeholder="Enter new name..." name="name" class="" id="" />
     </div>
+    <input type="file" class="w-full p-2 border border-gray-400 rounded-md" name="file" />
+    <div class="form-group ml-auto pr-2">
+      <button type="submit" value="Save" class="py-2 px-4 shadow-md bg-green-400 rounded-md">Upload</button>
+    </div>
+  </form>
 {% endblock %}
