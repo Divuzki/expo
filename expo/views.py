@@ -30,20 +30,6 @@ def home_view(request, id=None):
     else:
         return redirect("/ex/pchekr/")
 
-
-# Uploading document page view
-def Upload(request):
-    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
-        name = request.POST.get("name")
-        file = request.FILES["file"]
-        if name and file:
-            file = Document.objects.create(file=file)
-            file.save()
-            import_docx(Chapter, file, Textz, name)
-    else:
-        res = redirect("/ex/pchekr/")
-    return render(request, "p/upload.html")
-
 # Displaying search results page view
 
 
@@ -198,18 +184,42 @@ def passcode_looker(request):
 def buy_code(request):
     return render(request, "p/buy_code.html")
 
+# Uploading document page view
+
+
+def Upload(request):
+    res = render(request, "p/upload.html")
+    if request.user.is_authenticated and request.user.is_staff == True:
+        if request.method == "POST":
+            name = request.POST.get("name")
+            file = request.FILES["file"]
+            if name and file:
+                file = Document.objects.create(file=file)
+                file.save()
+                import_docx(Chapter, file, Textz, name)
+                res = render(request, "p/upload.html",
+                             {"msg": "Upload was sucessful"})
+        elif request.method == "GET":
+            res = render(request, "p/upload.html")
+        else:
+            res = redirect("/ex/pchekr/")
+    return res
+
 
 def generate_codes(request):
     res = render(request, "p/codeG.html")
-    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
-        num = request.POST.get("num")
-        if num:
-            codes = []
-            for num in range(0, int(num)):
-                qs = Pass.objects.create()
-                qs.save()
-                codes.append(qs.passcode)
-            res = render(request, "p/codeG.html", {"codes": codes})
-    else:
-        res = redirect("/ex/pchekr/")
+    if request.user.is_authenticated and request.user.is_staff == True:
+        if request.method == "POST":
+            num = request.POST.get("num")
+            if num:
+                codes = []
+                for num in range(0, int(num)):
+                    qs = Pass.objects.create()
+                    qs.save()
+                    codes.append(qs.passcode)
+                res = render(request, "p/codeG.html", {"codes": codes})
+        elif request.method == "GET":
+            res = render(request, "p/codeG.html")
+        else:
+            res = redirect("/ex/pchekr/")
     return res

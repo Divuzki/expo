@@ -50,7 +50,7 @@
         {% if request.COOKIES.pass_code %} HOME {% else %} .docx importer {% endif %}
       </a>
       <button
-        class="navbar-toggler"
+        class="navbar-toggler flex outline-none shadow-md bg-blue-300"
         type="button"
         data-toggle="collapse"
         data-target="#navbarCollapse"
@@ -58,7 +58,7 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon bg-slate-100 rounded-md w-2 h-4 m-auto"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
@@ -80,9 +80,7 @@
             <a class="nav-link" href="/ex/buy/">Buy Passcode</a>
           </li>
         </ul>
-      </div>
-
-      <!-- Search Bar -->
+        <!-- Search Bar -->
       {% if request.COOKIES.pass_code %}
       <form class="form-inline mt-2 mt-md-0" action="/ex/search">
         <input
@@ -98,6 +96,7 @@
         </button>
       </form>
       {% endif %}
+      </div>
     </nav>
 
     <main role="main" class="container">

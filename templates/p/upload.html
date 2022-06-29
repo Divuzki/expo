@@ -1,4 +1,7 @@
 {% extends "comp/b.html" %} {% load static %} {% block title %}Upload .docx{%endblock %} {% block content %}
+{% if msg %}
+<h2 class="text-3xl w-full h-full font-semibold flex justify-center items-center">{{msg}}</h2>
+{% else %}
   <h2 class="text-3xl font-semibold my-3">Upload a .docx file</h2>
   <p class="lead text-base">
     It's important to notice that the .docx file has to be separated between
@@ -20,4 +23,5 @@
       <button type="submit" value="Save" class="py-2 px-4 shadow-md bg-green-400 rounded-md">Upload</button>
     </div>
   </form>
+  {% endif %}
 {% endblock %}
