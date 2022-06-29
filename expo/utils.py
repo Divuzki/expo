@@ -60,8 +60,9 @@ def import_docx(Model, doc, Textz=None, name=None):
 
     # Iterate over document paragraphs
     for paragraph in doc_file.paragraphs:
+        ex = paragraph.text.replace(
+            "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("ans", "<b> ans</b>")
         if not Textz is None:
-            ex = paragraph.text.replace("answer", "<br /><b> answer</b>").replace("ANS", "<br /><b> ans</b>").replace("ans", "<br /><b> ans</b>")
             qs = Textz.objects.filter(paragraph=ex)
             if not qs.exists():
                 pc = Textz.objects.create(paragraph=ex)
@@ -84,7 +85,7 @@ def import_docx(Model, doc, Textz=None, name=None):
         # If paragraph has text, just insert text inside paragraph tags
         else:
             text += ('\n<p class="lead text-base font-semibold">' +
-                     paragraph.text.replace("answer", "<br /><b> answer</b>").replace("ANS", " <br /><b> ans</b>").replace("ans", "<br /><b> ans</b>") + '</p>')
+                     ex + '</p>')
     if name:
         obj = Model.objects.create(title=name, document=doc)
         obj.save()
