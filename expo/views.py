@@ -33,13 +33,15 @@ def home_view(request, id=None):
 
 # Uploading document page view
 def Upload(request):
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
         name = request.POST.get("name")
         file = request.FILES["file"]
         if name and file:
             file = Document.objects.create(file=file)
             file.save()
             import_docx(Chapter, file, Textz, name)
+    else:
+        res = redirect("/ex/pchekr/")
     return render(request, "p/upload.html")
 
 # Displaying search results page view
@@ -62,6 +64,7 @@ class Search(TemplateView):
 
     # Check if query returned anything and merge all result lists
     def get_queryset(self, *agrs, **kwargs):
+        results = []
         passcode = self.request.COOKIES.get('pass_code', False)
         if passcode:
             qs = Pass.objects.filter(passcode=passcode).first()
@@ -69,7 +72,6 @@ class Search(TemplateView):
                 if not self.get_query():
                     return None
                 else:
-                    results = []
                     for q in self.get_query():
                         if results == []:
                             results = self.get_result(q)
@@ -78,6 +80,8 @@ class Search(TemplateView):
                                 set(results) & set(self.get_result(q)))
             else:
                 return redirect("/ex/pchekr/")
+        else:
+            return redirect("/ex/pchekr/")
         return results
 
     # Send all necessary variables to page render
@@ -197,13 +201,15 @@ def buy_code(request):
 
 def generate_codes(request):
     res = render(request, "p/codeG.html")
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
         num = request.POST.get("num")
         if num:
             codes = []
-            for num in range(1, int(num)):
+            for num in range(0, int(num)):
                 qs = Pass.objects.create()
                 qs.save()
                 codes.append(qs.passcode)
             res = render(request, "p/codeG.html", {"codes": codes})
+    else:
+        res = redirect("/ex/pchekr/")
     return res

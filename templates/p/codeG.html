@@ -1,8 +1,10 @@
 {% extends "comp/b.html" %} {% load static %} {% block title %} Code Generator
 {% endblock %} 
 {% block content %}
-{% if codes %} {% for code in codes %}
-<p>{{code}}</p>
+{% if codes %} 
+<h1 class="text-3xl font-semibold">{{codes.count}} New Passcodes</h1>
+{% for code in codes %}
+<p class="text-base font-bold">{{code}}</p>
 {% endfor %} {% else %}
 <form method="post" class="flex flex-col gap-4">
     {% csrf_token %}
