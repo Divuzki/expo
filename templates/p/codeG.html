@@ -6,7 +6,7 @@
 {% for code in codes %}
 <p class="text-base font-bold">{{code}}</p>
 {% endfor %} {% else %}
-<form method="post" class="flex flex-col gap-4">
+<form method="post" action="{% url 'gpage' %}" class="flex flex-col gap-4">
     {% csrf_token %}
     <input type="number" class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md" name="num" />
     <div class="form-group">

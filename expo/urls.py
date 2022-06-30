@@ -13,13 +13,13 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', home_view, name='home-docx'),
-    path('up/', Upload, name='upload-docx'),
-    path('search', Search.as_view(), name='search-docx'),
+    path('', home_view, name='home_docx'),
+    path('up/', Upload, name='upload_docx'),
+    path('search', Search.as_view(), name='search_docx'),
     path('pchekr/', passcode_checker, name="passcode_checker"),
     path('end/', end_session, name="end_session"),
     path('look/', passcode_looker, name="passcode_looker"),
-    path('buy/', buy_code, name="passcode_looker"),
+    path('buy/', buy_code, name="buy_passcode"),
     path("p/complete/", paymentComplete, name="payment-completed"),
     path("p/complete/<str:tId>/", paymentComplete, name="show-pass"),
     path('c/<int:id>/', home_view, name='cpage'),

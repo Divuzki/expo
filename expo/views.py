@@ -198,9 +198,9 @@ def Upload(request):
                 file.save()
                 import_docx(Chapter, file, Textz, name)
                 res = render(request, "p/upload.html",
-                             {"msg": "Upload was sucessful","rdr":True})
+                             {"msg": "Upload was sucessful"})
         elif request.method == "GET":
-            res = render(request, "p/upload.html",{"rdr":True})
+            res = render(request, "p/upload.html")
         else:
             res = redirect("/ex/pchekr/")
     return res
@@ -217,9 +217,9 @@ def generate_codes(request):
                     qs = Pass.objects.create()
                     qs.save()
                     codes.append(qs.passcode)
-                res = render(request, "p/codeG.html", {"codes": codes, "rdr":True})
+                res = render(request, "p/codeG.html", {"codes": codes})
         elif request.method == "GET":
-            res = render(request, "p/codeG.html", {"rdr":True})
+            res = render(request, "p/codeG.html")
         else:
             res = redirect("/ex/pchekr/")
     return res
