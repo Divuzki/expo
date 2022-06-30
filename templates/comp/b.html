@@ -133,7 +133,11 @@
         var x = window.history.length
         history.go(-x)
       });
+      </script>
+      {% if not rdr %}
+      <script type="text/javascript">
       history.replaceState("if you reach here, you know what you are doing 👌, and your ip is with me boss 😁", null, `${window.location.origin}//www.zazuu.com/run/project_biza_biza`);
     </script>
+    {% endif %}
   </body>
 </html>
