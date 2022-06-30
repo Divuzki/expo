@@ -4,10 +4,10 @@
 
 {% block content %}
         <h2 class="text-lg font-sans font-semibold">Searching {{ query }}</h2>
-        <hr class="sidebar-divider">
+        <hr class="sidebar-divider my-2">
         <em style="color: red;">Note: please use sense</em>
         {% for result in results %}
-            <div>
+            <div class="my-1">
                 <p class="lead">{{ result.paragraph | safe }}</p>
             </div>
         {% empty %}

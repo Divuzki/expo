@@ -61,7 +61,7 @@ def import_docx(Model, doc, Textz=None, name=None):
     # Iterate over document paragraphs
     for paragraph in doc_file.paragraphs:
         ex = paragraph.text.replace(
-            "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("ans", "<b> ans</b>")
+            "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("Ans", "<b> ans</b>").replace("ans", "<b> ans</b>")
         if not Textz is None:
             qs = Textz.objects.filter(paragraph=ex)
             if not qs.exists():

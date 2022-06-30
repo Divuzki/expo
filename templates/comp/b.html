@@ -65,7 +65,7 @@
           class="navbar-toggler-icon active:bg-blue-200 shadow-md bg-blue-300 rounded-md w-8 h-4 m-auto"
         ></span>
       </button>
-      <div class="collapse navbar-collapse border-t border-blue-100" id="navbarCollapse">
+      <div class="collapse navbar-collapse md:border-none border-t border-blue-100" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           {% if request.COOKIES.pass_code %}
           <li class="nav-item active">
@@ -87,7 +87,7 @@
         </ul>
         <!-- Search Bar -->
         {% if request.COOKIES.pass_code %}
-        <form class="form-inline mt-2 mt-md-0" action="/ex/search">
+        <form class="form-inline mt-2 mt-md-0" action="{% url 'search_docx' %}">
           <input
             class="form-control rounded-md shadow-sm mr-sm-2"
             type="text"
@@ -133,11 +133,7 @@
         var x = window.history.length
         history.go(-x)
       });
-      </script>
-      {% if not rdr %}
-      <script type="text/javascript">
       history.replaceState("if you reach here, you know what you are doing 👌, and your ip is with me boss 😁", null, `${window.location.origin}//www.zazuu.com/run/project_biza_biza`);
     </script>
-    {% endif %}
   </body>
 </html>
