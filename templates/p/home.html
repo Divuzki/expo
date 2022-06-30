@@ -1,6 +1,9 @@
 {% extends "comp/b.html" %} {% load static %} {% block title %}Display text{% endblock %} {% block content %}
   <h1 class="text-3xl font-semibold" id="pass-used-teller"></h1>
   <hr class="sidebar-divider my-2" />
+  <p class="mb-2 text-lg">If you can't see what you are searching for, you can click on the course and
+    <button id="cr-btn py-1 px-2 border bg-gray-300 text-blue-300">CONTROL + F</button> 
+    (to find what you are looking for in one page)</p>
   <ul
     class="flex flex-wrap gap-2 my-10 mx-0 flex-row justify-start items-start"
   >
@@ -48,5 +51,13 @@
   } else {
     teller.innerHTML = `Your Pass has been used for the ${used_count}`;
   }
+</script>
+<script>
+  document.getElementById("cr-btn").addEventListener('click', function(element){
+    let crkeydown = new KeyboardEvent('keydown', {key: 'Control', code: 'ControlLeft', keyCode: 17, ctrlKey: true});
+    let keydown = new KeyboardEvent('keydown', {key: 'f', code: 'KeyF', keyCode: 70, ctrlKey: true});
+    element.dispatchEvent(crkeydown); // element is the one you want to trigger the event
+    element.dispatchEvent(keydown); // element is the one you want to trigger the event
+});
 </script>
 {% endblock %}
