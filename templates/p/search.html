@@ -3,13 +3,34 @@
 {% block title %}Searching {{ query }}{% endblock %}
 
 {% block content %}
-        <h2 class="text-lg font-sans font-semibold">Searching {{ query }}</h2>
+{% if request.COOKIES.pass_code %}
+{% if query %}
+        <h2 class="text-xl font-sans font-semibold">
+            Searching {{ query }}
+        </h2>
         <hr class="sidebar-divider my-2">
+        {% endif %}
+        {% if not results %}
+        <div class="my-1">
+            <p class="lead font-semibole text-xl uppercase">Nothing was found BOSS 😥</p>
+        </div>
+        {% else %}
         <em style="color: red;">Note: please use sense</em>
         {% for result in results %}
             <div class="my-1">
-                <p class="lead">{{ result.paragraph | safe }}</p>
+                <p class="lead font-medium">{{ result.paragraph | safe }}</p>
             </div>
         {% empty %}
         {% endfor %}
+        {% endif %}
+{% else %}
+<div class="flex flex-col justify-center items center w-full gap-2">
+
+    <h1 class="text-3xl font-medium w-full flex justify-center capitalize">You can search anything with a passcode oh</h1>
+    <button onclick=`window.location.href="{% url 'buy_passcode' %}"` 
+    class="font-semibold border rounded-md px-3 py-2 text-lg flex bg-emerald-300 hover:bg-green-300 text-gray-600 hover:text-slate-600 justify-center">
+        Go and buy your code
+    </button>
+</div>
+{% endif %}
 {% endblock %}
