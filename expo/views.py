@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView
 from django.db.models import Q
 from .utils import import_docx
 from .models import Document, Chapter, Textz, PassCode as Pass
@@ -133,8 +133,7 @@ def paymentComplete(request, tId=None):
         n = body['newId']
         if n:
             qs = Pass.objects.create(transactionId=n)
-            # print("BODY:", body)
-            # print(qs.passcode)
+            qs.save()
             data = {
                 "msg": "Payment Completed!",
                 "code": qs.passcode

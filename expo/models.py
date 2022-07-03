@@ -25,6 +25,7 @@ class Chapter(models.Model):
 
 
 class Textz(models.Model):
+    document = models.ForeignKey(Document, related_name='document', on_delete=models.CASCADE, null=True, blank=True)
     paragraph = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
