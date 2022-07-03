@@ -150,8 +150,6 @@ def paymentComplete(request, tId=None):
 
         code = Pass.objects.filter(transactionId=tId).first()
 
-        res = render(request, "p/pshow.html",
-                     {"lookingup": True, "error": "TransactionID do not exists!"})
         if not code is None:
             res = render(request, "p/pshow.html",
                          {
@@ -160,6 +158,9 @@ def paymentComplete(request, tId=None):
                              "used_count": code.used_count,
                              "lookup": lookup
                          })
+        else:
+            res = render(request, "p/pshow.html",
+                     {"lookingup": True, "error": "TransactionID do not exists!"})
         return res
 
 
