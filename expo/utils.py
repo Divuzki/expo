@@ -63,9 +63,9 @@ def import_docx(Model, doc, Textz=None, name=None):
         ex = paragraph.text.replace(
             "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("Ans", "<b> ans</b>").replace("ans", "<b> ans</b>")
         if not Textz is None:
-            qs = Textz.objects.filter(paragraph=ex).first()
-            if not qs is None:
-                pc = Textz.objects.create(paragraph=ex, document=doc)
+            qs = Textz.objects.filter(paragraph=ex)
+            if not qs.exists():
+                pc = Textz.objects.create(paragraph=ex)
                 pc.save()
         # If heading paragraph then create a new chapter
         if paragraph.style.name.split(' ')[0] == 'Heading':

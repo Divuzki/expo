@@ -25,7 +25,8 @@ class Chapter(models.Model):
 
 
 class Textz(models.Model):
-    document = models.ForeignKey(Document, related_name='document', on_delete=models.CASCADE, null=True, blank=True)
+    document = models.ForeignKey(
+        Document, related_name='document', on_delete=models.CASCADE, null=True, blank=True)
     paragraph = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -66,7 +67,8 @@ def create_document(sender, instance, **kwargs):
 def create_passcode(sender, instance, *args, **kwargs):
     if not instance.passcode:
         word = random_string_generator(size=4)
-        instance.transactionId = random_string_generator(size=17).upper()
+        if not instance.transactionId:
+            instance.transactionId = random_string_generator(size=17).upper()
         instance.passcode = truncate_string(
             value="divuzki"+word, max_length=5, suffix=word)
 
