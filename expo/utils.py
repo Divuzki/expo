@@ -59,14 +59,11 @@ def import_docx(Model, doc, Textz=None, name=None):
     rels = relate_images(img_dir, doc_file)
 
     # Iterate over document paragraphs
+    texts = []
     for paragraph in doc_file.paragraphs:
         ex = paragraph.text.replace(
             "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("Ans", "<b> ans</b>").replace("ans", "<b> ans</b>")
-        if not Textz is None:
-            qs = Textz.objects.filter(paragraph=ex)
-            if not qs.exists():
-                pc = Textz.objects.create(paragraph=ex)
-                pc.save()
+        texts.append(ex)
         # If heading paragraph then create a new chapter
         if paragraph.style.name.split(' ')[0] == 'Heading':
             # If chapter is not empty, save it
@@ -89,6 +86,12 @@ def import_docx(Model, doc, Textz=None, name=None):
     if name:
         obj = Model.objects.create(title=name, document=doc)
         obj.save()
+        if not Textz == None:
+            for ex in texts:
+                qs = Textz.objects.filter(paragraph=ex, chapter=obj).first()
+                if qs is None:
+                    pc = Textz.objects.create(paragraph=ex, chapter=obj)
+                    pc.save()
     # Save the remaining object
     obj.text = text
     obj.save()
