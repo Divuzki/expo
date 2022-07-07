@@ -41,8 +41,6 @@ class PassCode(models.Model):
 
     def __str__(self):
         sr = self.passcode
-        if self.transactionId:
-            sr = self.transactionId
         return f"{sr} => {self.used_count}"
 
 
