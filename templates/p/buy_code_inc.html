@@ -3,10 +3,19 @@
 <form id="paymentForm" autocomplete="on">
   <div class="form-group">
     <label for="email">Email To Send Receipt: </label>
-    <input type="email" class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md" id="email-address" required />
+    <input
+      type="email"
+      class="text-base text-gray-800 focus:shadow-md transition-all duration-100 ease-in-out font-semibold w-full px-3 outline-none py-2 border rounded-md"
+      id="email-address"
+      required
+    />
   </div>
   <div class="form-submit">
-    <button type="submit" class="btn btn-success shadow-md  border-none bg-green-400" onclick="payWithPaystack()">
+    <button
+      type="submit"
+      class="btn btn-success shadow-md border-none bg-green-400"
+      onclick="payWithPaystack()"
+    >
       Pay
     </button>
   </div>
@@ -32,14 +41,14 @@
   var csrftoken = getCookie("csrftoken");
   const paymentForm = document.getElementById("paymentForm");
   function payWithPaystack(e) {
-    e.preventDefault();
+    if (e.preventDefault) e.preventDefault();
     let handler = PaystackPop.setup({
-      key: "pk_live_eff80ec289bfe7c96e1777d1f6ee61df3afcd1a0", // Replace with your public key
+      key: "pk_test_9493c907abe5cbe707fa9c1433539f23875b10ea", // Replace with your public key
       email: document.getElementById("email-address").value,
-      amount: 2000 * 100,
+      amount: 5000 * 100,
       // label: "Optional string that replaces customer email"
       onClose: function () {
-        alert("You Just Closed Payment Window!");
+        alert("You Just Closed Payment Window!, And Did Not Pay Anything");
       },
       callback: function (response) {
         var url = "/ex/p/complete/";
