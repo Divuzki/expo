@@ -16,8 +16,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'skitte.herokuapp.com', "www.skitte.co",
-                 '192.168.137.1']
+ALLOWED_HOSTS = ['*']
 LOGIN_URL = "/login"
 MAX_SKIT_LENGTH = 240
 SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
@@ -177,7 +176,7 @@ if USE_S3:
     AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = config('AWS_DEFAULT_ACL')
-    AWS_S3_CUSTOM_DOMAIN = f'd3sk8vjenfxgtm.cloudfront.net'
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.eu-west-2.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     AWS_S3_SECURE_URLS = True
     # storage
