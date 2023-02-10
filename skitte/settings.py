@@ -11,10 +11,12 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'sw.js')
 # SECURITY WARNING: keep the secret key used in production secret!
 # remember on same level as manage.py
 SECRET_KEY = config('SECRET_KEY')
+OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 USE_S3 = config('USE_S3', cast=bool)
+
 
 ALLOWED_HOSTS = ['*']
 LOGIN_URL = "/login"
@@ -23,8 +25,8 @@ SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
 URL = "//skitte.co"
 INTERNAL_IPS = ('127.0.0.1', 'localhost',
                 'www.skitte.co', 'skitte.co')
+                
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
