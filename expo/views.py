@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from django.db.models import Q
-from .utils import import_docx
+from .utils import import_docx, get_ai_results
 from .models import Document, Chapter, Textz, PassCode as Pass
 
 # Home page view
@@ -75,6 +75,14 @@ class Search(TemplateView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('query') or ''
         context['results'] = self.get_queryset()
+
+        # check if the query length is greater than 10
+        # if greater than 10, add ai_res to context from `get_ai_results`
+        ai_prompt = context['query']
+        if len(context['query']) > 10:
+            if not '?' in context['query']:
+                ai_prompt = ai_prompt + "?"
+            context['ai_res'] = get_ai_results(ai_prompt)
         return context
 
 
@@ -160,7 +168,7 @@ def paymentComplete(request, tId=None):
                          })
         else:
             res = render(request, "p/pshow.html",
-                     {"lookingup": True, "error": "TransactionID do not exists!"})
+                         {"lookingup": True, "error": "TransactionID do not exists!"})
         return res
 
 

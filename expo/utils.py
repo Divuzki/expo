@@ -1,15 +1,14 @@
 import os
 import docx
 import zipfile
-
+import openai
 from django.conf import settings
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
+OPENAI_KEY = settings.OPENAI_SECRET_KEY
 
 # Import images from docx
-
-
 def import_images(doc):
     img_dir = os.path.join(MEDIA_ROOT, 'images')
 
@@ -109,3 +108,23 @@ def delete_docx(doc):
             os.remove(os.path.join(root, name))
         for name in dirs:
             os.rmdir(os.path.join(root, name))
+
+# function to get ai results
+def get_ai_results(prompt):
+    openai.api_key = OPENAI_KEY
+
+    model_engine = 'text-davinci-003'
+
+    completion = openai.Completion.create(
+        engine=model_engine,
+        prompt=prompt,
+        temperature=0.9,
+        max_tokens=100,
+        n=1,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=['\n', 'answer:']
+    )
+
+    return completion.choices[0].text
