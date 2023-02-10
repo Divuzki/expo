@@ -14,6 +14,7 @@ Checker{% endblock %} {% block content %}
     and first logout from the previous session before using a code!
   </p>
   <small className="opacity-75">Disclaimer: <b>No Refunds</b> & previous button will not work</small>
+  <div class="animate-pulse text-lg text-purple-600 font-bold">You can now search and get AI Results (will be useful for french)</div>
   {% endif %}
   <form method="POST" class="my-2" action="{% url 'passcode_checker' %}" autocomplete="off" enctype="multipart/form-data">
     {% csrf_token %}
