@@ -82,7 +82,10 @@ class Search(TemplateView):
         if len(context['query']) > 10:
             if not '?' in context['query']:
                 ai_prompt = ai_prompt + "?"
-            context['ai_res'] = get_ai_results(ai_prompt)
+            try:
+                context['ai_res'] = get_ai_results(ai_prompt)
+            except:
+                context['ai_res'] = ""
         return context
 
 
