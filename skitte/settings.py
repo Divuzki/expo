@@ -11,7 +11,7 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'sw.js')
 # SECURITY WARNING: keep the secret key used in production secret!
 # remember on same level as manage.py
 SECRET_KEY = config('SECRET_KEY')
-OPENAI_SECRET_KEY = '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'
+OPENAI_SECRET_KEY = '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'
 # OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
