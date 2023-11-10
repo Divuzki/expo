@@ -11,7 +11,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # remember on same level as manage.py
 SECRET_KEY = config('SECRET_KEY')
 OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
-# OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)

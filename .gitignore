@@ -13,8 +13,8 @@ env/
 # production
 /build
 
-.env
 bfg.jar
+.env
 
 # misc
 .DS_Store
