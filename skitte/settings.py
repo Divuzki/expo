@@ -10,8 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 # remember on same level as manage.py
 SECRET_KEY = config('SECRET_KEY')
-OPENAI_SECRET_KEY = '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'
-# OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
+OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
@@ -20,9 +19,9 @@ USE_S3 = config('USE_S3', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 LOGIN_URL = "/login"
-URL = "//skitte.co"
+URL = "//expo.skitte.co"
 INTERNAL_IPS = ('127.0.0.1', 'localhost',
-                'www.skitte.co', 'skitte.co')
+                'expo.skitte.co')
                 
 # Application definition
 INSTALLED_APPS = [
