@@ -1,7 +1,5 @@
 {% extends "comp/b.html" %}
 
-{% load static %}
-
 {% block title %}{% if lookup == 'no' %}Payment Successful{% elif lookup == 'yes' %}Found Passcode!{% else %}Passcode Lookup{% endif %} {% endblock %}
 
 {% block content %}

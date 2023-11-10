@@ -1,9 +1,0 @@
-{% extends 'base.html' %} 
-{% block head_title %}| Feeds{% endblock head_title %} 
-{% block content %}
-{% if request.user.is_authenticated %}
-  <div id="skitte-feed" data-username="{{user.username}}" data-canSkit="true" data-is_authenticated="yah"></div>
-{% else %}
-  <div id="skitte" data-is_authenticated="nah"></div>
-{% endif %}
-{% endblock content %}

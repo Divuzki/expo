@@ -3,10 +3,25 @@ import docx
 import zipfile
 import openai
 from django.conf import settings
+import string
+import random
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
 OPENAI_KEY = settings.OPENAI_SECRET_KEY
+
+
+
+def truncate_string(value, max_length=45, suffix="skt"):
+    string_value = str(value)
+    string_truncated = string_value[:min(
+        len(string_value), (max_length - len(suffix)))]
+    suffix = (suffix if len(string_value) > max_length else '')
+    return suffix+string_truncated
+
+
+def random_string_generator(size=50, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 # Import images from docx
 def import_images(doc):
@@ -57,28 +72,28 @@ def import_docx(Model, doc, Textz=None, name=None):
     img_dir = import_images(doc)
     rels = relate_images(img_dir, doc_file)
 
-    # Iterate over document paragraphs
+    # Iterate over document texts
     texts = []
-    for paragraph in doc_file.paragraphs:
-        ex = paragraph.text.replace(
+    for text in doc_file.texts:
+        ex = text.text.replace(
             "answer", "<b> answer</b>").replace("ANS", "<b> ans</b>").replace("Ans", "<b> ans</b>").replace("ans", "<b> ans</b>")
         texts.append(ex)
-        # If heading paragraph then create a new chapter
-        if paragraph.style.name.split(' ')[0] == 'Heading':
+        # If heading text then create a new chapter
+        if text.style.name.split(' ')[0] == 'Heading':
             # If chapter is not empty, save it
             if obj.title:
                 obj.text = text
                 obj.save()
             obj = Model.objects.create(
-                title=paragraph.text.strip(), document=doc)
+                title=text.text.strip(), document=doc)
             text = ''
-        # If paragraph has an image, insert an image tag with the image file
-        elif 'Graphic' in paragraph._p.xml:
+        # If text has an image, insert an image tag with the image file
+        elif 'Graphic' in text._p.xml:
             for rId in rels:
-                if rId in paragraph._p.xml:
+                if rId in text._p.xml:
                     text += ('\n<img style="width: 50vw;" src="' +
                              os.path.join(MEDIA_URL, 'images/word/media', rels[rId]) + '">')
-        # If paragraph has text, just insert text inside paragraph tags
+        # If text has text, just insert text inside text tags
         else:
             text += ('\n<p class="lead text-base font-semibold">' +
                      ex + '</p>')
@@ -87,9 +102,9 @@ def import_docx(Model, doc, Textz=None, name=None):
         obj.save()
         if not Textz == None:
             for ex in texts:
-                qs = Textz.objects.filter(paragraph=ex, chapter=obj).first()
+                qs = Textz.objects.filter(text=ex, chapter=obj).first()
                 if qs is None:
-                    pc = Textz.objects.create(paragraph=ex, chapter=obj)
+                    pc = Textz.objects.create(text=ex, chapter=obj)
                     pc.save()
     # Save the remaining object
     obj.text = text

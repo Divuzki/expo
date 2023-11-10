@@ -1,11 +1,13 @@
-{% extends "comp/b.html" %} {% load static %} {% block title %}
+{% extends "comp/b.html" %} {% block title %}
 {{ chapter.title }}
 {% endblock %} {% block content %}
     <h1 class="text-lg font-semibold" id="pass-used-teller"></h1>
     <hr class="sidebar-divider mb-3" />
     <h3 class="text-lg font-semibold flex underline justify-center">{{ chapter.document.file.name|safe }}</h3>
   <section class="my-2 mx-0" id="{{ chapter.id }}">
-    <p class="lead text-base font-semibold">{{ chapter.text|safe }}</p>
+    {% for question in questions %}
+    <p class="lead text-base font-semibold">{{ question.text|safe }}</p>
+    {% endfor %}
   </section>
 <script>
   function getCookie(cname) {

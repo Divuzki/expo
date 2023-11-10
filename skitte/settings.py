@@ -4,7 +4,6 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'sw.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -21,8 +20,6 @@ USE_S3 = config('USE_S3', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 LOGIN_URL = "/login"
-MAX_SKIT_LENGTH = 240
-SKIT_ACTION_OPTIONS = ["like", "dislike", "repost"]
 URL = "//skitte.co"
 INTERNAL_IPS = ('127.0.0.1', 'localhost',
                 'www.skitte.co', 'skitte.co')
@@ -35,49 +32,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third Party
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
     'django_cleanup.apps.CleanupConfig',
-    'corsheaders',
-    'channels',
-    'rest_auth',
-    'rest_auth.registration',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'debug_toolbar',
     'storages',
-
-    'pwa',
-
-    # GraphQL
-    'graphene_django',
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',  # refresh tokens are optional
-    "graphql_auth",
-
-    # my app
-    'skit',
-    # 'skitte_chat',
-    'accounts',
-    'profiles',
     'expo',
 ]
-
-AUTH_USER_MODEL = 'accounts.User'
-CONTACT_MODEL = 'profiles.Profile'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-LOGIN_REDIRECT_URL = '/feed'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -101,19 +67,8 @@ TEMPLATES = [
     },
 ]
 
-# Channels
+
 WSGI_APPLICATION = 'skitte.wsgi.application'
-ASGI_APPLICATION = "skitte.asgi.application"
-
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
 
 
 # Database
@@ -213,121 +168,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-
-# STMP
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-# For React
-CORS_ORIGIN_ALLOW_ALL = True  # any website has access to my api
-CORS_URLS_REGEX = r'^/api/.*$'
-CSRF_COOKIE_NAME = "csrftoken"
-DEFAULT_RENDERER_CLASSES = [
-    'rest_framework.renderers.JSONRenderer',
-]
-
-DEFAULT_AUTHENTICATION_CLASSES = [
-    'rest_framework.authentication.SessionAuthentication',
-]
-
-if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
-    DEFAULT_AUTHENTICATION_CLASSES += [
-        'skitte.rest_api.dev.DevAuthentication'
-    ]
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
-    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
-}
-
-
 AUTHENTICATION_BACKENDS = [
-    "graphql_auth.backends.GraphQLAuthBackend",
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
-
-    # optional
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-
-    "JWT_ALLOW_ANY_CLASSES": [
-        "graphql_auth.mutations.Register",
-        "graphql_auth.mutations.VerifyAccount",
-        "graphql_auth.mutations.ResendActivationEmail",
-        "graphql_auth.mutations.SendPasswordResetEmail",
-        "graphql_auth.mutations.PasswordReset",
-        "graphql_auth.mutations.ObtainJSONWebToken",
-        "graphql_auth.mutations.VerifyToken",
-        "graphql_auth.mutations.RefreshToken",
-        "graphql_auth.mutations.RevokeToken",
-        "graphql_auth.mutations.VerifySecondaryEmail",
-    ],
-}
-
-GRAPHENE = {
-    'SCHEMA': 'skit.graphql.schema.schema',
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
-}
-GRAPHQL_AUTH = {
-    'SEND_ACTIVATION_EMAIL': True,
-    "REGISTER_MUTATION_FIELDS": [
-        'first_name', 'last_name', 'username', 'email', 'password1', 'password2']
-}
-
-PWA_APP_NAME = 'Skitte'
-PWA_APP_DESCRIPTION = "Skitte A Trusted Social Media Network Were A Comfortable Community Network Is Developed."
-PWA_APP_THEME_COLOR = '#4CAF50'
-PWA_APP_BACKGROUND_COLOR = '#0C0C0C'
-PWA_APP_DISPLAY = 'minimal-ui'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'portrait'
-PWA_APP_START_URL = '/feed'
-PWA_APP_STATUS_BAR_COLOR = 'default'
-PWA_APP_ICONS = [
-    {
-        "src": f"{STATIC_URL}media/logo/icon-256x256.png",
-        "sizes": "256x256",
-        "type": "image/png"
-    },
-    {
-        "src": f"{STATIC_URL}media/logo/1024.png",
-        "sizes": "1024x1024",
-        "type": "image/png"
-    },
-    {
-        "src": f"{STATIC_URL}media/logo/icon-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png"
-    },
-    {
-        "src": f"{STATIC_URL}media/skitte-logo-curve-rectangle.png",
-        "sizes": "341x222",
-        "type": "image/png"
-    },
-]
-PWA_APP_ICONS_APPLE = [
-    {
-        "src": f"{STATIC_URL}media/logo/icon-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-    }
-]
-PWA_APP_SPLASH_SCREEN = [
-    {
-        'src': f'{STATIC_URL}media/skitte-logo-curve-rectangle.png',
-        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
-    }
-]
-PWA_APP_DIR = 'ltr'
-PWA_APP_LANG = 'en-US'
