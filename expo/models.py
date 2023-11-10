@@ -19,20 +19,27 @@ class Document(models.Model):
 
 class Chapter(models.Model):
     title = models.CharField(max_length=255, null=False)
-    text = models.TextField(blank=True, null=True)
     document = models.ForeignKey(
         Document, related_name='chapters', on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
+    
+    def questions(self):
+        return self.text.all()
 
-
-class Textz(models.Model):
+class Question(models.Model):
     chapter = models.ForeignKey(
-        Chapter, related_name='paragraph', on_delete=models.CASCADE, null=True, blank=True)
-    paragraph = models.TextField(blank=True, null=True)
+        Chapter, related_name='text', on_delete=models.CASCADE, null=True, blank=True)
+    text = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp']
 
-class PassCode(models.Model):
-    passcode = models.CharField(
+
+class Passcode(models.Model):
+    code = models.CharField(
         max_length=5, null=True, blank=True, unique=True)
     transactionId = models.CharField(
         max_length=20, null=True, blank=True, unique=True)
@@ -40,7 +47,7 @@ class PassCode(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        sr = self.passcode
+        sr = self.code
         return f"{sr} => {self.used_count}"
 
 
@@ -57,19 +64,19 @@ class PassCode(models.Model):
 # Set signal for importing .docx after uploading it
 @receiver(models.signals.post_save, sender=Document)
 def create_document(sender, instance, **kwargs):
-    import_docx(Chapter, instance, Textz)
+    import_docx(Chapter, instance, Question)
     # Clear all blank chapters after every import
     Chapter.objects.filter(title='').delete()
 
 
 def create_passcode(sender, instance, *args, **kwargs):
-    if not instance.passcode:
+    if not instance.code:
         word = random_string_generator(size=4)
         if not instance.transactionId:
             instance.transactionId = random_string_generator(size=17).upper()
-        instance.passcode = truncate_string(
+        instance.code = truncate_string(
             value="divuzki"+word, max_length=5, suffix=word)
 
 
 pre_save.connect(create_document, sender=Document)
-pre_save.connect(create_passcode, sender=PassCode)
+pre_save.connect(create_passcode, sender=Passcode)

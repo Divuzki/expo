@@ -51,7 +51,7 @@
         alert("You Just Closed Payment Window!, And Did Not Pay Anything");
       },
       callback: function (response) {
-        var url = "/ex/p/complete/";
+        var url = "/p/complete/";
         data = { newId: `${response.reference}` };
         let request = new Request(url, {
           method: "POST",
@@ -62,7 +62,7 @@
           }),
         });
         fetch(request).then(function () {
-          window.location.href = `/ex/p/complete/${response.reference}/`;
+          window.location.href = `/p/complete/${response.reference}/`;
         });
       },
     });

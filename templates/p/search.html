@@ -18,7 +18,7 @@
         <em style="color: red;">Note: please use sense</em>
         {% for result in results %}
             <div class="my-1">
-                <p class="lead font-medium">{{ result.paragraph | safe }}</p>
+                <p class="lead font-medium">{{ result.text | safe }}</p>
             </div>
         {% empty %}
         {% endfor %}
