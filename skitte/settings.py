@@ -82,10 +82,7 @@ WSGI_APPLICATION = 'skitte.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'skitte.sqlite3'),
-        'TEST': {
-            'NAME': os.path.join(BASE_DIR, 'skitte_db_test.sqlite3')
-        }
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 db_from_env = dj_database_url.config(conn_max_age=600)
@@ -155,7 +152,7 @@ if USE_S3:
     COMPRESS_STORAGE = 'skitte.storage_backends.CachedStaticS3BotoStorage'
 
     # s3 public media settings
-    PUBLIC_MEDIA_LOCATION = 'sktmedia'
+    PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'skitte.storage_backends.PublicMediaStorage'
     # MEDIA_ROOT = PUBLIC_MEDIA_LOCATION
@@ -165,9 +162,9 @@ if USE_S3:
 
 elif not USE_S3:
     STATIC_URL = '/static/'
-    MEDIA_URL = '/sktmedia/'
+    MEDIA_URL = '/media/'
     STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
-    MEDIA_ROOT = os.path.join(BASE_DIR, "sktmedia")
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media-root")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
