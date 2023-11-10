@@ -1,20 +1,26 @@
 import os
-from decouple import config
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# remember on same level as manage.py
-SECRET_KEY = config('SECRET_KEY')
+def config(var, default=None):
+    try:
+        return os.environ[var]
+    except KeyError:
+        if default is not None:
+            return default
+        error_msg = f"Set the {var} environment variable"
+        raise Exception(error_msg)
+
+SECRET_KEY = config('SECRET_KEY', 'secret-key')
 OPENAI_SECRET_KEY = config('OPENAI_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
-USE_S3 = config('USE_S3', cast=bool)
+DEBUG = config('DEBUG', True)
+USE_S3 = config('USE_S3', False)
 
 
 ALLOWED_HOSTS = ['*']
