@@ -8,7 +8,8 @@ django-storages
 gunicorn
 Pillow
 python-dateutil
-python-decouple
+python-dotenv
 python-docx
 whitenoise
 openai
+psycopg2-binary
